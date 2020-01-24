@@ -1,0 +1,8 @@
+# bottles
+*.bottle.tar.gz
+*.bottle.json
+
+# Editors tmp
+*~
+\#*#
+.#*
