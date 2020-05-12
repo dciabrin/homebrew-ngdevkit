@@ -18,8 +18,10 @@ class NgdevkitGngeo < Formula
     system "autoreconf", "-iv"
     system "./configure", "--prefix=#{prefix}",
                           "--program-prefix=ngdevkit-"
-    system "make", "-j1", "pkgdatadir=#{prefix}/share/ngdevkit-gngeo"
-    system "make", "install", "pkgdatadir=#{prefix}/share/ngdevkit-gngeo"
+    $gmake = "#{Formula["make"].opt_bin}/gmake"
+    ENV["MAKE"] = $gmake
+    system $gmake, "-j1", "pkgdatadir=#{prefix}/share/ngdevkit-gngeo"
+    system $gmake, "install", "pkgdatadir=#{prefix}/share/ngdevkit-gngeo"
   end
 
   test do

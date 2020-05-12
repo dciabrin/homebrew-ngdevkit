@@ -1,0 +1,81 @@
+language: c
+os: osx
+
+if: type = push AND fork = false AND branch =~ ^nightly-
+
+env:
+  global:
+    - secure: "B6ggzGozEFzZVzYOfvIB6YV9yf7rZfQJuq/aQbYq6Tp2cERcstlJE3fwvrVnrqXBiY2KEFP9L5EeBKx4Spht4403+4pReHVvwrupPLsjUvb2EQtfxrT8bTjX36YKXwrAasjkY3bGwOVCKfP4qJU9taex+guXPSs0mOYluh7MBsf9rRdz59kq7FIKLlyZaCLK0V9p45Fi1Tj1zGxoU2M8UuxcUmc1vXc+n9e3U7Ige7zdRXaXmkMVMvxfhEglG9ImWu3jNa7/6OvAGI62BPyzW1t2rqEQgM753qfmMQ646wlgpIntS7aO3pCOQSrHnjduTgSxdfs7gZCE0Lfn+4tkOUHZicGSIv+QfwPW9fqrBSHZs+hau7X6QTrPj+l9fzzp5NquiA2PMd9nji3MUZPl45GETBPxkyjBCUrdaSC6R/Z6cw9PfY6cx6Ue2QbidLjEoXbqH+smZroa1P/GesaXodSPnanvOrQVf5H6wXsEYsiSEsi0FRTcCZK28Jd6g12er+cNb21FGsp4M4mc3CyGFXHiiDpyycje25CVjSRIq3ny9Oem6Nt1ve4Z+FWq35/SH0nl84g8ZMM7SbteVgCIv7O3HJEmZXuIlXDcisJo6zuttbSYv0BP4eObUWPKTWrMU2QwI70MS8ihlpweD+zNAmkG9Q2pD/vU5jzWAhqGsOY="
+    - GIT_ASKPASS=.travis/git-ask-pass.sh
+
+jobs:
+  include:
+    - stage:
+      name: "Catalina - 10.15"
+      osx_image: xcode11.4
+      env:
+        OS="10.15"
+      if: commit_message !~ /bottled.*(10\.15|10\.14|10\.13)/
+    - stage:
+      name: "Mojave - 10.14"
+      osx_image: xcode11.3
+      env:
+        OS="10.14"
+      if: commit_message =~ /bottled.*10\.15$/
+    - stage:
+      name: "High Sierra - 10.13"
+      osx_image: xcode10.1
+      env:
+        OS="10.13"
+      if: commit_message =~ /bottled.*10\.14$/
+    - stage:
+      name: "Publish readiness"
+      osx_image: xcode11.4
+      env:
+      if: commit_message =~ /bottled.*10\.15.*10\.14.*10\.13$/
+      script:
+        - pkg=$(echo $TRAVIS_BRANCH | sed -e 's/^nightly-//')
+        - .travis/publish-bottle.sh $pkg
+      deploy: skip
+      after_deploy: skip
+
+addons:
+  homebrew:
+    packages:
+    - jq
+    update: true
+
+install:
+  - mkdir -p $(brew --repo dciabrin/ngdevkit)
+  - rm -rf $(brew --repo dciabrin/ngdevkit)
+  - ln -s $PWD $(brew --repo dciabrin/ngdevkit)
+  - git config remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'
+  - git fetch origin -q
+  - git config user.name 'CI build bot'
+  - git config user.email '<>'
+  - git config url."https://api@github.com/".insteadOf "https://github.com/"
+
+script:
+  - pkg=$(echo $TRAVIS_BRANCH | sed -e 's/^nightly-//')
+  - test -f Formula/$pkg.rb && echo building bottle for $pkg on macOS $OS
+  - brew install dciabrin/ngdevkit/$pkg --build-bottle
+  - brew bottle dciabrin/ngdevkit/$pkg --json --root-url=https://dl.bintray.com/dciabrin/bottles-ngdevkit
+  - BOTTLE_MERGE_OPTS=$(if git log --format=%s -n 1 | grep -q bottled; then echo "--keep-old"; fi)
+  - brew bottle --merge *.json --write $BOTTLE_MERGE_OPTS --no-commit
+  - .travis/generate-bintray-deploy.sh $pkg .travis/deploy.json.tpl > deploy.json
+
+deploy:
+  provider: bintray
+  file: deploy.json
+  user: dciabrin
+  key: $BINTRAY_API_KEY
+  skip_cleanup: true
+  on:
+    all_branches: true
+    condition: $TRAVIS_BRANCH =~ ^nightly-
+
+after_deploy:
+  - git checkout $TRAVIS_BRANCH
+  - git add Formula/emudbg.rb
+  - git commit -m "$(.travis/bottle-commit-message.sh $OS)"
+  - git push
