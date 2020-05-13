@@ -1,7 +1,7 @@
 language: c
 os: osx
 
-if: type = push AND fork = false AND branch =~ ^nightly-
+if: type = push AND fork = false AND branch =~ ^nightly-.*-[0-9]*$
 
 env:
   global:
@@ -34,7 +34,7 @@ jobs:
       env:
       if: commit_message =~ /bottled.*10\.15.*10\.14.*10\.13$/
       script:
-        - pkg=$(echo $TRAVIS_BRANCH | sed -e 's/^nightly-//')
+        - pkg=$(.travis/pkg-name-from-branch.sh $TRAVIS_BRANCH)
         - .travis/publish-bottle.sh $pkg
       deploy: skip
       after_deploy: skip
@@ -56,7 +56,7 @@ install:
   - git config url."https://api@github.com/".insteadOf "https://github.com/"
 
 script:
-  - pkg=$(echo $TRAVIS_BRANCH | sed -e 's/^nightly-//')
+  - pkg=$(.travis/pkg-name-from-branch.sh $TRAVIS_BRANCH)
   - test -f Formula/$pkg.rb && echo building bottle for $pkg on macOS $OS
   - brew install dciabrin/ngdevkit/$pkg --build-bottle
   - brew bottle dciabrin/ngdevkit/$pkg --json --root-url=https://dl.bintray.com/dciabrin/bottles-ngdevkit
@@ -72,10 +72,11 @@ deploy:
   skip_cleanup: true
   on:
     all_branches: true
-    condition: $TRAVIS_BRANCH =~ ^nightly-
+    condition: $TRAVIS_BRANCH =~ ^nightly-.*-[0-9]*$
 
 after_deploy:
+  - pkg=$(.travis/pkg-name-from-branch.sh $TRAVIS_BRANCH)
   - git checkout $TRAVIS_BRANCH
-  - git add Formula/emudbg.rb
+  - git add Formula/$pkg.rb
   - git commit -m "$(.travis/bottle-commit-message.sh $OS)"
   - git push
