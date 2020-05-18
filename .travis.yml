@@ -35,7 +35,8 @@ jobs:
       if: commit_message =~ /bottled.*10\.15.*10\.14.*10\.13$/
       script:
         - pkg=$(.travis/pkg-name-from-branch.sh $TRAVIS_BRANCH)
-        - .travis/publish-bottle.sh $pkg
+        - .travis/publish-bottles.sh $pkg
+        - .travis/publish-new-brew-version.sh $pkg $TRAVIS_BRANCH
       deploy: skip
       after_deploy: skip
 
@@ -58,6 +59,8 @@ install:
 script:
   - pkg=$(.travis/pkg-name-from-branch.sh $TRAVIS_BRANCH)
   - test -f Formula/$pkg.rb && echo building bottle for $pkg on macOS $OS
+  # for 10.13, make sure no python2 package is currently linked
+  - if brew list python@2 &>/dev/null; then brew unlink python@2; fi
   - brew install -v dciabrin/ngdevkit/$pkg --build-bottle
   - brew bottle dciabrin/ngdevkit/$pkg --json --root-url=https://dl.bintray.com/dciabrin/bottles-ngdevkit
   - BOTTLE_MERGE_OPTS=$(if git log --format=%s -n 1 | grep -q bottled; then echo "--keep-old"; fi)
