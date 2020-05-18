@@ -12,4 +12,4 @@ git push
 
 # Log some confirmation info
 PKG_VERSION=$(sed -ne 's/.*version.*"\([^"]*\)".*/\1/p' Formula/$PKG.rb | head -1)
-echo "New verion $PKG_VERSION of $PKG is now available in ngdevkit tap"
+echo "New version of $PKG ($PKG_VERSION) is now available in ngdevkit tap"
