@@ -3,7 +3,7 @@ class NgdevkitGngeo < Formula
   homepage "https://github.com/dciabrin/gngeo"
   url "https://github.com/dciabrin/gngeo/archive/nightly-20200119170941.tar.gz"
   sha256 "2f2674bb84c6cddaeedb785964e7130298c3f76ef85cfb5e0f5e8ff39f8e8ea0"
-  version "0.8.1+20200119170941-1"
+  version "0.8.1+20200119170941-2"
 
   bottle do
     root_url "https://dl.bintray.com/dciabrin/bottles-ngdevkit"
@@ -13,6 +13,7 @@ class NgdevkitGngeo < Formula
   end
 
   depends_on "autoconf" => :build
+  depends_on "autoconf-archive" => :build
   depends_on "automake" => :build
   depends_on "libtool" => :build
   depends_on "make" => :build
