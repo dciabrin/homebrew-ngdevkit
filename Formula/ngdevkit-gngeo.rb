@@ -8,6 +8,7 @@ class NgdevkitGngeo < Formula
   bottle do
     root_url "https://dl.bintray.com/dciabrin/bottles-ngdevkit"
     sha256 "32837dfbf99561342ebabebbf71f8bcfafa7bfbafa6ade3ff9e1f383303a1126" => :catalina
+    sha256 "d44cedae4f2bc306dad416230e70e56b68baafe6aea9fb0dc347ea1e134d226a" => :mojave
   end
 
   depends_on "autoconf" => :build
