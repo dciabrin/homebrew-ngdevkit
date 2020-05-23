@@ -2,6 +2,7 @@
 # $1: package name
 set -eu
 PKG=$1
+MASTER_BRANCH=${2:-master}
 
 if [ -f configure.ac ]; then
     HEAD_VERSION=$(sed -ne 's/AC_INIT.*\[\([^]]*\)\].*/\1/p' configure.ac)
@@ -16,9 +17,9 @@ HOMEBREW_BASEDIR=$(dirname $(dirname $0))
 export GIT_ASKPASS=$(realpath ${HOMEBREW_BASEDIR}/.travis/git-ask-pass.sh)
 
 # TODO: do not push tag if it already exist
-git checkout master
+git checkout ${MASTER_BRANCH}
 HEAD_COMMIT_DATE=$(TZ=UTC git show --quiet --date='format-local:%Y%m%d%H%M' --format='%cd')
-echo "Tagging $PKG with new version HEAD_COMMIT_DATE in master"
+echo "Tagging $PKG with new version HEAD_COMMIT_DATE in ${MASTER_BRANCH}"
 git tag nightly-$HEAD_COMMIT_DATE
 git push --tags
 
