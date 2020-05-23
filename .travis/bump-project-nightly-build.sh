@@ -27,7 +27,7 @@ else
 fi
 
 echo "Computing archive URL and SHA256 for $PKG $HEAD_COMMIT_DATE"
-ARCHIVE="https://github.com/dciabrin/$PKG/archive/nightly-${HEAD_COMMIT_DATE}.tar.gz"
+ARCHIVE=$(echo "https://github.com/dciabrin/$PKG/archive/nightly-${HEAD_COMMIT_DATE}.tar.gz" | sed 's/ngdevkit-gngeo/gngeo/')
 HASH=$(curl -sL $ARCHIVE | sha256sum | cut -d' ' -f1)
 
 HOMEBREW_VERSION=${HEAD_VERSION}+${HEAD_COMMIT_DATE}-1
