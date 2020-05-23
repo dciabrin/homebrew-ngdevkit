@@ -16,12 +16,15 @@ fi
 HOMEBREW_BASEDIR=$(dirname $(dirname $0))
 export GIT_ASKPASS=$(realpath ${HOMEBREW_BASEDIR}/.travis/git-ask-pass.sh)
 
-# TODO: do not push tag if it already exist
 git checkout ${MASTER_BRANCH}
 HEAD_COMMIT_DATE=$(TZ=UTC git show --quiet --date='format-local:%Y%m%d%H%M' --format='%cd')
-echo "Tagging $PKG with new version HEAD_COMMIT_DATE in ${MASTER_BRANCH}"
-git tag nightly-$HEAD_COMMIT_DATE
-git push --tags
+if ! (git tag -l | grep -q nightly-$HEAD_COMMIT_DATE); then
+    echo "Tagging $PKG with new version ${HEAD_COMMIT_DATE} on tip of ${MASTER_BRANCH}"
+    git tag nightly-$HEAD_COMMIT_DATE
+    git push --tags
+else
+    echo "Tagging ${HEAD_COMMIT_DATE} for $PKG already exists, not retagging"
+fi
 
 echo "Computing archive URL and SHA256 for $PKG $HEAD_COMMIT_DATE"
 ARCHIVE="https://github.com/dciabrin/$PKG/archive/nightly-${HEAD_COMMIT_DATE}.tar.gz"
