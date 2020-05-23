@@ -36,10 +36,9 @@ cd $HOMEBREW_BASEDIR
 git checkout master
 sed -i -e "s%^  url.*%  url \"${ARCHIVE}\"%" -e "s%^  sha256.*%  sha256 \"${HASH}\"%" -e "s%^  version.*%  version \"${HOMEBREW_VERSION}\"%" ./Formula/$PKG.rb
 
-# TODO: delete nightly branch if it already exists
 NEW_NIGHTLY_VERSION=nightly-${PKG}-${HEAD_COMMIT_DATE}
 git checkout -b ${NEW_NIGHTLY_VERSION}
 git add ./Formula/$PKG.rb
 git commit -m "Nightly build ${PKG} ${HEAD_COMMIT_DATE}"
-git push -u origin ${NEW_NIGHTLY_VERSION}
+git push -f -u origin ${NEW_NIGHTLY_VERSION}
 echo "New nightly version ready to be rebuilt in homebrew"
