@@ -38,7 +38,9 @@ jobs:
         - .travis/publish-bottles.sh $pkg
         - .travis/publish-new-brew-version.sh $pkg $TRAVIS_BRANCH
       deploy: skip
-      after_deploy: skip
+      after_deploy:
+        - pkg=$(.travis/pkg-name-from-branch.sh $TRAVIS_BRANCH)
+        - .travis/gc-nightly-branches.sh --branch-regex='^refs/heads/nightly-'"$pkg"'-[0-9]*'
 
 addons:
   homebrew:
