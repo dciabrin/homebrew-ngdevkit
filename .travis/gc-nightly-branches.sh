@@ -26,7 +26,8 @@ check() {
 
 # ----------------- config parsing -----------------
 #
-REPO=${TRAVIS_REPO_SLUG:-}
+USER=$(echo ${TRAVIS_REPO_SLUG:-} | cut -d'/' -f1)
+REPO=$(echo ${TRAVIS_REPO_SLUG:-} | cut -d'/' -f2)
 GITHUB_TOKEN=${GH_TOKEN:-}
 BRANCH_REGEX=
 DRYRUN=
@@ -50,6 +51,9 @@ while true; do
     esac
 done
 
+if [ -z "$USER" ]; then
+    error "no user specified"
+fi
 if [ -z "$REPO" ]; then
     error "no repository specified"
 fi
@@ -58,10 +62,6 @@ if [ -z "$GITHUB_TOKEN" ]; then
 fi
 if [ -z "$BRANCH_REGEX" ]; then
     error "no branch regex specified, cannot filter which branch to remove"
-fi
-if [ -z "$USER" ]; then
-    # if unset, extract user from repo slug
-    USER=$(echo $REPO | cut -d'/' -f1)
 fi
 CREDS=$USER:$GITHUB_TOKEN
 
