@@ -9,7 +9,7 @@ set +x
 
 
 help() {
-    echo "Usage: $0 --repo={user}/{repo} --token={github-api-token} --branch-regex={str}" >&2
+    echo "Usage: $0 -u {user} -r {repo} -t {github-api-token} -b {branch-regex}" >&2
     exit ${1:-0}
 }
 
@@ -32,7 +32,8 @@ GITHUB_TOKEN=${GH_TOKEN:-}
 BRANCH_REGEX=
 DRYRUN=
 
-OPTS=$(/usr/bin/getopt -n $0 --long help,dry-run,user:,repo:,token:,branch-regex: -- $0 $@)
+# assume getopt is the BSD variant, with only short options
+OPTS=$(/usr/bin/getopt hdu:r:t:b: $@)
 if [ $? != 0 ]; then
     error "parsing arguments failed"
 fi
@@ -40,12 +41,12 @@ fi
 eval set -- "$OPTS"
 while true; do
     case "$1" in
-        --help) help;;
-        --dry-run ) DRYRUN=1; shift ;;
-        --user ) USER="$2"; shift 2 ;;
-        --repo ) REPO="$2"; shift 2 ;;
-        --token ) GITHUB_TOKEN="$2"; shift 2 ;;
-        --branch-regex ) BRANCH_REGEX="$2"; shift 2 ;;
+        -h) help;;
+        -d ) DRYRUN=1; shift ;;
+        -u ) USER="$2"; shift 2 ;;
+        -r ) REPO="$2"; shift 2 ;;
+        -t ) GITHUB_TOKEN="$2"; shift 2 ;;
+        -b ) BRANCH_REGEX="$2"; shift 2 ;;
         -- ) shift; break ;;
         * ) break ;;
     esac
