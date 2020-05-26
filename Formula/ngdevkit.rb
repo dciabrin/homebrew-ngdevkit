@@ -1,16 +1,16 @@
 class Ngdevkit < Formula
   desc "Open source development for Neo-Geo"
   homepage "https://github.com/dciabrin/ngdevkit"
-  url "https://github.com/dciabrin/ngdevkit/archive/nightly-202005250010.tar.gz"
-  sha256 "7fa94885aa7e1d07d6775c20090336ab4205a26d3a820b7d9737f1f0ecaa9c3b"
-  version "0.2+202005250010-1"
+  url "https://github.com/dciabrin/ngdevkit/archive/nightly-202005261926.tar.gz"
+  sha256 "ab4e5c42fa105f143b36ed70e2543ecdce5fb60869392b77fc474c22621f29b6"
+  version "0.2+202005261926-1"
 
   bottle do
     root_url "https://dl.bintray.com/dciabrin/bottles-ngdevkit"
     cellar :any_skip_relocation
-    sha256 "077ad3cac31f9840e3cfb6ce1e5f8a66fec988efd997403ea703a5b7f86c7e98" => :catalina
-    sha256 "56dfb31130b0d618fd02bde8963cee11cfe431fa1924aa9b8fbc5e0559297e9e" => :mojave
-    sha256 "32761c0028dad85e16cd4764aeb08f3e6f8ca95c26a9f3fa9fa854cd5e0a6faf" => :high_sierra
+    sha256 "435cc57c7ce5ed315a154d77ba19e84b8b47a8b2af59a1414a71db748d51ec65" => :catalina
+    sha256 "f6099ab1d8cce124c57eee1976a7b764d1e2e5306b6af5f7e099817d4b075199" => :mojave
+    sha256 "05b22e02c742a24ebd757b8babac957ce03d9f9c1b71ee1b7342ddaf8c48ffa6" => :high_sierra
   end
 
   depends_on "autoconf" => :build
