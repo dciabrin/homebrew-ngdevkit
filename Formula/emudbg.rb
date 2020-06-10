@@ -1,16 +1,16 @@
 class Emudbg < Formula
   desc "emulator-agnostic source-level debugging API"
   homepage "https://github.com/dciabrin/emudbg"
-  url "https://github.com/dciabrin/emudbg/archive/nightly-202005292051.tar.gz"
-  sha256 "03a2fe2cef0553cfbc1f472f1bde6179acec03d78253551a0cbc572e5b2fc5d1"
-  version "0.2+202005292051-1"
+  url "https://github.com/dciabrin/emudbg/archive/nightly-202006101942.tar.gz"
+  sha256 "a7eacf2720c4dad1c4dadae99632260666c03acbd59c785c28f8dd5590cdbd99"
+  version "0.2+202006101942-1"
 
   bottle do
     root_url "https://dl.bintray.com/dciabrin/bottles-ngdevkit"
     cellar :any_skip_relocation
-    sha256 "feeb273918c2007d7953815f0f023ccb3ebb12b86d55540260145049b6969562" => :catalina
-    sha256 "b57b2064150869dbfebab442fd63280713877ddc165b238b5471abcb4f2cb6af" => :mojave
-    sha256 "7e28bfd1a8a610d4751af11ad52549be65624f0a833b7711404bbc67da2e28a5" => :high_sierra
+    sha256 "eb679df40453992fd213c4da8f3ec5ef8bd2c509ebd7943293813e3e6fe63f2e" => :catalina
+    sha256 "7a24dc23e363bbafc36ce32163543f0f73731fe416996262071a4c81767706e6" => :mojave
+    sha256 "69dc331a7e660f91582312c180585f18d098bf9c22758396d27002a843cc3565" => :high_sierra
   end
 
   depends_on "autoconf" => :build
