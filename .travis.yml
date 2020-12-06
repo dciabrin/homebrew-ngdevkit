@@ -23,16 +23,10 @@ jobs:
         OS="10.14"
       if: commit_message =~ /bottled.*10\.15$/
     - stage:
-      name: "High Sierra - 10.13"
-      osx_image: xcode10.1
-      env:
-        OS="10.13"
-      if: commit_message =~ /bottled.*10\.14$/
-    - stage:
       name: "Publish readiness"
       osx_image: xcode11.4
       env:
-      if: commit_message =~ /bottled.*10\.15.*10\.14.*10\.13$/
+      if: commit_message =~ /bottled.*10\.15.*10\.14$/
       script:
         - pkg=$(.travis/pkg-name-from-branch.sh $TRAVIS_BRANCH)
         - .travis/publish-bottles.sh $pkg
@@ -60,11 +54,14 @@ install:
 script:
   - pkg=$(.travis/pkg-name-from-branch.sh $TRAVIS_BRANCH)
   - test -f Formula/$pkg.rb && echo building bottle for $pkg on macOS $OS
-  # for 10.13, make sure no python2 package is currently linked
-  - if brew list python@2 &>/dev/null; then brew unlink python@2; fi
-  - brew install -v dciabrin/ngdevkit/$pkg --build-bottle
+  # force-install bottles for dependencies, and build the main package
+  - sed 's/=> :build//' Formula/$pkg.rb > /tmp/$pkg.rb
+  - brew install -v --only-dependencies --force-bottle /tmp/$pkg.rb
+  - brew install -v dciabrin/ngdevkit/$pkg --build-bottle --ignore-dependencies
   - brew bottle dciabrin/ngdevkit/$pkg --json --root-url=https://dl.bintray.com/dciabrin/bottles-ngdevkit
-  - BOTTLE_MERGE_OPTS=$(if git log --format=%s -n 1 | grep -q bottled; then echo "--keep-old"; fi)
+  - BOTTLE_MERGE_OPTS=$(if brew info --json dciabrin/ngdevkit/$pkg | jq '.[0].bottle | length' | grep -wq 1; then echo "--keep-old"; fi)
+  - BOTTLE=$(jq -r ".[\"dciabrin/ngdevkit/$pkg\"].bottle.tags | keys[0]" *.json)
+  - sed -i bck "/:${BOTTLE}/d" $(brew --repo dciabrin/ngdevkit)/Formula/$pkg.rb
   - brew bottle --merge *.json --write $BOTTLE_MERGE_OPTS --no-commit
   - .travis/generate-bintray-deploy.sh $pkg .travis/deploy.json.tpl > deploy.json
 
