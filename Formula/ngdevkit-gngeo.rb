@@ -9,7 +9,6 @@ class NgdevkitGngeo < Formula
     root_url "https://dl.bintray.com/dciabrin/bottles-ngdevkit"
     sha256 "dbcdb80d44174900a65e981a86d9d97a4582308a129bdc444cd768520d561550" => :catalina
     sha256 "28b2e3c838e39e6c04ee679a0d29ed01988d562002e1444511c9199fdadd691e" => :mojave
-    sha256 "166b06784a30fc7c146fd862d76a9771e1932254a20e6ebb06365676f97535ae" => :high_sierra
   end
 
   depends_on "autoconf" => :build

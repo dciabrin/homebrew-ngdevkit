@@ -10,7 +10,6 @@ class Emudbg < Formula
     cellar :any_skip_relocation
     sha256 "8ab0aceeb07dae1a74961c4e1060e0179002af3e5eb8cf52ec2e3ae7282dbf95" => :catalina
     sha256 "b9e3099491aa3d3f2ecca3a8325a4dff4ef09587f29556baae8bb776f789a67f" => :mojave
-    sha256 "69dc331a7e660f91582312c180585f18d098bf9c22758396d27002a843cc3565" => :high_sierra
   end
 
   depends_on "autoconf" => :build

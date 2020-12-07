@@ -10,7 +10,6 @@ class Ngdevkit < Formula
     cellar :any_skip_relocation
     sha256 "cc75bab392e681cadf1b6acad17961e841b45254d513f4f6f9e6ef9ba07d7112" => :catalina
     sha256 "bdc06947a998a2b3403f7ae86e61ff9a082a854ed506086f0de3d5b6fb8a9fcb" => :mojave
-    sha256 "db4416850e4edfbe1ef2aa46396aea770b8a401bd57a5b0ce16c2968fc65193b" => :high_sierra
   end
 
   depends_on "autoconf" => :build

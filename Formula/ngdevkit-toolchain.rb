@@ -9,7 +9,6 @@ class NgdevkitToolchain < Formula
     root_url "https://dl.bintray.com/dciabrin/bottles-ngdevkit"
     sha256 "558c0c4af7871f036242d14f21932a95ba3726b95254ab8c8136e8b054454c72" => :catalina
     sha256 "da53b7b656fbefb342de92471bf808a5c1b3aa6a155538ccd0114d0a8f598f6c" => :mojave
-    sha256 "69de9cf8d9c2aebde6f8b02cb9d95fb4fefaaab663c7ed89d76ad647f6161b51" => :high_sierra
   end
 
   depends_on "autoconf" => :build
