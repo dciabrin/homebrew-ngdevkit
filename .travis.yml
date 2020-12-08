@@ -39,7 +39,7 @@ addons:
   homebrew:
     packages:
     - jq
-    update: true
+    # update: true
 
 install:
   - mkdir -p $(brew --repo dciabrin/ngdevkit)
