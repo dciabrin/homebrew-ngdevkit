@@ -2,8 +2,8 @@ class NgdevkitGngeo < Formula
   desc "Portable Neo-Geo emulator customized for ngdevkit"
   homepage "https://github.com/dciabrin/gngeo"
   url "https://github.com/dciabrin/gngeo/archive/nightly-202101261818.tar.gz"
-  sha256 "cf738bdfe45ee76da59655d724dc877d87a1c6cd386a1c31cb97977f6090591e"
   version "0.8.1+202101261818-1"
+  sha256 "cf738bdfe45ee76da59655d724dc877d87a1c6cd386a1c31cb97977f6090591e"
 
   bottle do
     root_url "https://dl.bintray.com/dciabrin/bottles-ngdevkit"
@@ -25,10 +25,10 @@ class NgdevkitGngeo < Formula
     system "autoreconf", "-iv"
     system "./configure", "--prefix=#{prefix}",
                           "--program-prefix=ngdevkit-"
-    $gmake = "#{Formula["make"].opt_bin}/gmake"
-    ENV["MAKE"] = $gmake
-    system $gmake, "-j1", "pkgdatadir=#{prefix}/share/ngdevkit-gngeo"
-    system $gmake, "install", "pkgdatadir=#{prefix}/share/ngdevkit-gngeo"
+    gmake = "#{Formula["make"].opt_bin}/gmake"
+    ENV["MAKE"] = gmake
+    system gmake, "-j1", "pkgdatadir=#{share}/ngdevkit-gngeo"
+    system gmake, "install", "pkgdatadir=#{share}/ngdevkit-gngeo"
   end
 
   test do
