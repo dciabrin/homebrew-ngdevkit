@@ -1,0 +1,16 @@
+pr:
+- azure-pipelines
+
+jobs:
+  - job: catalina
+    displayName: 'macOS 10.15 (Catalina)'
+    # condition
+    pool:
+      vmImage: 'macOS-10.15'
+    steps:
+      - checkout: self
+        persistCredentials: true
+
+      - script: |
+          echo script on 10.15
+        displayName: 'do some stuff on 10.15 only'
