@@ -1,0 +1,51 @@
+trigger:
+- nightly/*
+
+jobs:
+  - job: catalina
+    displayName: macOS 10.15 (Catalina)
+    pool:
+      vmImage: 'macOS-10.15'
+    steps:
+      - script: .ci/bottle-formula-from-branch.sh
+        displayName: Bottle formula on 10.15
+        env:
+          OS: '10.15'
+          BRANCH: $(Build.SourceBranch)
+          HOMEBREW_BINTRAY_USER: dciabrin
+          HOMEBREW_BINTRAY_KEY: $(BINTRAY_KEY)
+      - script: cp *.bottle.json *.bottle*.tar.gz $(Build.ArtifactStagingDirectory)/
+        displayName: Capture built bottles for next job
+      - publish: $(Build.ArtifactStagingDirectory)
+        artifact: post_catalina
+
+  - job: mojave
+    dependsOn: catalina
+    displayName: macOS 10.14 (Mojave)
+    pool:
+      vmImage: 'macOS-10.14'
+    steps:
+      - checkout: self
+        persistCredentials: true
+      - download: current
+        artifact: post_catalina
+      - script: cp $(Pipeline.Workspace)/post_catalina/*.bottle.* $PWD/
+        displayName: Retrieve previously built bottles
+      - script: .ci/bottle-formula-from-branch.sh
+        displayName: Bottle formula on 10.14
+        env:
+          OS: '10.14'
+          BRANCH: $(Build.SourceBranch)
+          HOMEBREW_BINTRAY_USER: dciabrin
+          HOMEBREW_BINTRAY_KEY: $(BINTRAY_KEY)
+      - script: .ci/publish-bottles.sh
+        displayName: Publish new bottles
+        env:
+          BRANCH: $(Build.SourceBranch)
+          HOMEBREW_BINTRAY_USER: dciabrin
+          HOMEBREW_BINTRAY_KEY: $(BINTRAY_KEY)
+      - script: .ci/publish-new-formula-version.sh
+        displayName: Publish new Formula version
+        env:
+          BRANCH: $(Build.SourceBranch)
+      - script: git branch && git show
