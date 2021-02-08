@@ -48,4 +48,3 @@ jobs:
         displayName: Publish new Formula version
         env:
           BRANCH: $(Build.SourceBranch)
-      - script: git branch && git show
