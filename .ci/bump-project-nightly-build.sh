@@ -20,7 +20,7 @@ git checkout ${MASTER_BRANCH}
 HEAD_COMMIT_DATE=$(TZ=UTC git show --quiet --date='format-local:%Y%m%d%H%M' --format='%cd')
 if ! (git tag -l | grep -q nightly/$HEAD_COMMIT_DATE); then
     echo "Tagging $PKG with new version ${HEAD_COMMIT_DATE} on tip of ${MASTER_BRANCH}"
-    git tag nightly-$HEAD_COMMIT_DATE
+    git tag nightly/$HEAD_COMMIT_DATE
     git push --tags
 else
     echo "Tagging ${HEAD_COMMIT_DATE} for $PKG already exists, not retagging"
