@@ -14,11 +14,11 @@ else
 fi
 
 HOMEBREW_BASEDIR=$(dirname $(dirname $0))
-export GIT_ASKPASS=$(realpath ${HOMEBREW_BASEDIR}/.travis/git-ask-pass.sh)
+export GIT_ASKPASS=$(realpath ${HOMEBREW_BASEDIR}/.ci/git-ask-pass.sh)
 
 git checkout ${MASTER_BRANCH}
 HEAD_COMMIT_DATE=$(TZ=UTC git show --quiet --date='format-local:%Y%m%d%H%M' --format='%cd')
-if ! (git tag -l | grep -q nightly-$HEAD_COMMIT_DATE); then
+if ! (git tag -l | grep -q nightly/$HEAD_COMMIT_DATE); then
     echo "Tagging $PKG with new version ${HEAD_COMMIT_DATE} on tip of ${MASTER_BRANCH}"
     git tag nightly-$HEAD_COMMIT_DATE
     git push --tags
@@ -36,7 +36,7 @@ cd $HOMEBREW_BASEDIR
 git checkout master
 sed -i -e "s%^  url.*%  url \"${ARCHIVE}\"%" -e "s%^  sha256.*%  sha256 \"${HASH}\"%" -e "s%^  version.*%  version \"${HOMEBREW_VERSION}\"%" ./Formula/$PKG.rb
 
-NEW_NIGHTLY_VERSION=nightly-${PKG}-${HEAD_COMMIT_DATE}
+NEW_NIGHTLY_VERSION=nightly/${PKG}-${HEAD_COMMIT_DATE}
 git checkout -b ${NEW_NIGHTLY_VERSION}
 git add ./Formula/$PKG.rb
 git commit -m "Nightly build ${PKG} ${HEAD_COMMIT_DATE}"
