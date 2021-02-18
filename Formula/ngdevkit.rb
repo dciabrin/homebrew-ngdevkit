@@ -7,9 +7,8 @@ class Ngdevkit < Formula
 
   bottle do
     root_url "https://dl.bintray.com/dciabrin/bottles-ngdevkit"
-    cellar :any_skip_relocation
-    sha256 "d4c4fc050153677b6d903885eb2f54083aaf1173a4771d379822fa1366c3860a" => :catalina
-    sha256 "65613162d5bbc9fd8dd4271b4eb42e272efaeb844dc5ec663abc6f50da950fb0" => :mojave
+    sha256 cellar: :any_skip_relocation, catalina: "d4c4fc050153677b6d903885eb2f54083aaf1173a4771d379822fa1366c3860a"
+    sha256                               mojave:   "65613162d5bbc9fd8dd4271b4eb42e272efaeb844dc5ec663abc6f50da950fb0"
   end
 
   depends_on "autoconf" => :build

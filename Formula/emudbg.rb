@@ -7,10 +7,9 @@ class Emudbg < Formula
 
   bottle do
     root_url "https://dl.bintray.com/dciabrin/bottles-ngdevkit"
-    cellar :any_skip_relocation
     rebuild 1
-    sha256 "57e9ee8f9a59fb25f76fca63e567d460bf019c398dc7a98d3d5a1b97e76169fe" => :catalina
-    sha256 "57085a4b808f727fab15fe3bc9f357e275647d0aebc925cd0d50db5357512c85" => :mojave
+    sha256 cellar: :any_skip_relocation, catalina: "57e9ee8f9a59fb25f76fca63e567d460bf019c398dc7a98d3d5a1b97e76169fe"
+    sha256                               mojave:   "57085a4b808f727fab15fe3bc9f357e275647d0aebc925cd0d50db5357512c85"
   end
 
   depends_on "autoconf" => :build
