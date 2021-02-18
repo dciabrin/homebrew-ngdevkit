@@ -36,6 +36,7 @@ cd $HOMEBREW_BASEDIR
 git checkout master
 sed -i -e "s%^  url.*%  url \"${ARCHIVE}\"%" -e "s%^  sha256.*%  sha256 \"${HASH}\"%" -e "s%^  version.*%  version \"${HOMEBREW_VERSION}\"%" ./Formula/$PKG.rb
 sed -i '/^ *bottle do/,/ *end/{d;}' ./Formula/$PKG.rb
+sed -i '/^$/{N;s/^\n$//;}' ./Formula/$PKG.rb
 
 NEW_NIGHTLY_VERSION=nightly/${PKG}-${HEAD_COMMIT_DATE}
 git checkout -b ${NEW_NIGHTLY_VERSION}
