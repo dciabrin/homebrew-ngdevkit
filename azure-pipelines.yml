@@ -66,7 +66,7 @@ jobs:
       - script: |
           branch=`echo $BRANCH | sed 's%refs/heads/%%'`
           pkg=`.ci/pkg-name-from-branch.sh $branch`
-          .ci/gc-nightly-branches.sh -b '^refs/heads/nightly/'"$pkg"'-[0-9]*'
+          .ci/gc-nightly-branches.sh -u dciabrin -r emudbg -b '^refs/heads/nightly/'"$pkg"'-[0-9]*'
         displayName: Clean up old nightly branches
         env:
           BRANCH: $(Build.SourceBranch)
