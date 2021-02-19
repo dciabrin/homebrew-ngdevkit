@@ -3,7 +3,7 @@ trigger:
 
 jobs:
   - job: catalina
-    displayName: macOS 10.15 (Catalina)
+    displayName: "Bottle for macOS 10.15 (Catalina)"
     pool:
       vmImage: 'macOS-10.15'
     steps:
@@ -21,12 +21,10 @@ jobs:
 
   - job: mojave
     dependsOn: catalina
-    displayName: macOS 10.14 (Mojave)
+    displayName: "Bottle for macOS 10.14 (Mojave)"
     pool:
       vmImage: 'macOS-10.14'
     steps:
-      - checkout: self
-        persistCredentials: true
       - download: current
         artifact: post_catalina
       - script: cp $(Pipeline.Workspace)/post_catalina/*.bottle.* $PWD/
@@ -38,6 +36,23 @@ jobs:
           BRANCH: $(Build.SourceBranch)
           HOMEBREW_BINTRAY_USER: dciabrin
           HOMEBREW_BINTRAY_KEY: $(BINTRAY_KEY)
+      - script: cp *.bottle.json *.bottle*.tar.gz $(Build.ArtifactStagingDirectory)/
+        displayName: Capture built bottles for next job
+      - publish: $(Build.ArtifactStagingDirectory)
+        artifact: post_mojave
+
+  - job: publish
+    dependsOn: mojave
+    displayName: "Publish new version and bottles"
+    pool:
+      vmImage: 'macOS-10.15'
+    steps:
+      - checkout: self
+        persistCredentials: true
+      - download: current
+        artifact: post_mojave
+      - script: cp $(Pipeline.Workspace)/post_mojave/*.bottle.* $PWD/
+        displayName: Retrieve previously built bottles
       - script: .ci/publish-bottles.sh
         displayName: Publish new bottles
         env:
@@ -48,3 +63,11 @@ jobs:
         displayName: Publish new Formula version
         env:
           BRANCH: $(Build.SourceBranch)
+      - script: |
+          branch=`echo $BRANCH | sed 's%refs/heads/%%'`
+          pkg=`.ci/pkg-name-from-branch.sh $branch`
+          .ci/gc-nightly-branches.sh -b '^refs/heads/nightly/'"$pkg"'-[0-9]*'
+        displayName: Clean up old nightly branches
+        env:
+          BRANCH: $(Build.SourceBranch)
+          GH_TOKEN: $(GH_TOKEN)

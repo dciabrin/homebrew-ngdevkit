@@ -26,8 +26,8 @@ check() {
 
 # ----------------- config parsing -----------------
 #
-USER=$(echo ${TRAVIS_REPO_SLUG:-} | cut -d'/' -f1)
-REPO=$(echo ${TRAVIS_REPO_SLUG:-} | cut -d'/' -f2)
+USER=
+REPO=
 GITHUB_TOKEN=${GH_TOKEN:-}
 BRANCH_REGEX=
 DRYRUN=
