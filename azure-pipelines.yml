@@ -36,7 +36,7 @@ jobs:
           BRANCH: $(Build.SourceBranch)
           HOMEBREW_BINTRAY_USER: dciabrin
           HOMEBREW_BINTRAY_KEY: $(BINTRAY_KEY)
-      - script: cp *.bottle.json *.bottle*.tar.gz $(Build.ArtifactStagingDirectory)/
+      - script: cp git-bottle-sha.diff *.bottle.json *.bottle*.tar.gz $(Build.ArtifactStagingDirectory)/
         displayName: Capture built bottles for next job
       - publish: $(Build.ArtifactStagingDirectory)
         artifact: post_mojave
@@ -53,6 +53,11 @@ jobs:
         artifact: post_mojave
       - script: cp $(Pipeline.Workspace)/post_mojave/*.bottle.* $PWD/
         displayName: Retrieve previously built bottles
+      - script: |
+          patch -p1 < $(Pipeline.Workspace)/post_mojave/git-bottle-sha.diff
+          git add Formula/*.rb
+          git commit --amend --no-edit
+        displayName: Restore bottle hashes from previous job in git
       - script: .ci/publish-bottles.sh
         displayName: Publish new bottles
         env:

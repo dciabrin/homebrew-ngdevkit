@@ -24,3 +24,4 @@ cp Formula/$pkg.rb Formula/$pkg.rb.tmp
 brew test-bot $keepopt --skip-setup --root-url=$rooturl --bintray-org=dciabrin --tap=dciabrin/ngdevkit Formula/$pkg.rb
 cp Formula/$pkg.rb.tmp Formula/$pkg.rb
 brew pr-upload --no-commit $keepopt --no-publish --root-url=$rooturl --bintray-org=dciabrin
+git diff | tee git-bottle-sha.diff
