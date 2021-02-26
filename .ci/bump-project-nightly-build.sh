@@ -30,7 +30,6 @@ if ! (git tag -l | grep -q nightly-$HEAD_COMMIT_DATE); then
             echo "Tagging $PKG with ${HEAD_COMMIT_DATE} failed" >&2
             exit 1
         fi
-        fi
     fi
 else
     echo "Tagging ${HEAD_COMMIT_DATE} for $PKG already exists, not retagging"
