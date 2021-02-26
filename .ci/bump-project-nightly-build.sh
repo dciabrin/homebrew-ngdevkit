@@ -21,7 +21,17 @@ HEAD_COMMIT_DATE=$(TZ=UTC git show --quiet --date='format-local:%Y%m%d%H%M' --fo
 if ! (git tag -l | grep -q nightly-$HEAD_COMMIT_DATE); then
     echo "Tagging $PKG with new version ${HEAD_COMMIT_DATE} on tip of ${MASTER_BRANCH}"
     git tag nightly-$HEAD_COMMIT_DATE
-    git push --tags
+    if ! git push origin nightly-$HEAD_COMMIT_DATE; then
+        # If the tag has been created by somebody else in the mean time
+        # the push will fail. This is alright for us though
+        if [ "$(git ls-remote origin refs/tags/nightly-$HEAD_COMMIT_DATE)" != "" ]; then
+            echo "Tag already exists on origin, tag push in unecessary"
+        else
+            echo "Tagging $PKG with ${HEAD_COMMIT_DATE} failed" >&2
+            exit 1
+        fi
+        fi
+    fi
 else
     echo "Tagging ${HEAD_COMMIT_DATE} for $PKG already exists, not retagging"
 fi
