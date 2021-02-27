@@ -3,6 +3,7 @@ trigger:
 
 jobs:
   - job: catalina
+    timeoutInMinutes: 150
     displayName: "Bottle for macOS 10.15 (Catalina)"
     pool:
       vmImage: 'macOS-10.15'
@@ -20,6 +21,7 @@ jobs:
         artifact: post_catalina
 
   - job: mojave
+    timeoutInMinutes: 150
     dependsOn: catalina
     displayName: "Bottle for macOS 10.14 (Mojave)"
     pool:
