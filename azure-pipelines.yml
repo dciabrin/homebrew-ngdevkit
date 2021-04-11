@@ -8,7 +8,9 @@ jobs:
     pool:
       vmImage: 'macOS-10.15'
     steps:
-      - script: .ci/bottle-formula-from-branch.sh
+      - script: |
+          brew update
+          .ci/bottle-formula-from-branch.sh
         displayName: Bottle formula on 10.15
         env:
           OS: '10.15'
@@ -31,7 +33,9 @@ jobs:
         artifact: post_catalina
       - script: cp $(Pipeline.Workspace)/post_catalina/*.bottle.* $PWD/
         displayName: Retrieve previously built bottles
-      - script: .ci/bottle-formula-from-branch.sh
+      - script: |
+          brew update
+          .ci/bottle-formula-from-branch.sh
         displayName: Bottle formula on 10.14
         env:
           OS: '10.14'
