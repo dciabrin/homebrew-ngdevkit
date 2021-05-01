@@ -9,14 +9,14 @@ jobs:
       vmImage: 'macOS-10.15'
     steps:
       - script: |
+          pushd "$(brew --repo)" && git fetch && git reset --hard origin/master && popd
           brew update
           .ci/bottle-formula-from-branch.sh
         displayName: Bottle formula on 10.15
         env:
           OS: '10.15'
           BRANCH: $(Build.SourceBranch)
-          HOMEBREW_BINTRAY_USER: dciabrin
-          HOMEBREW_BINTRAY_KEY: $(BINTRAY_KEY)
+          HOMEBREW_GITHUB_API_TOKEN: $(HOMEBREW_GITHUB_API_TOKEN)
       - script: cp *.bottle.json *.bottle*.tar.gz $(Build.ArtifactStagingDirectory)/
         displayName: Capture built bottles for next job
       - publish: $(Build.ArtifactStagingDirectory)
@@ -34,14 +34,14 @@ jobs:
       - script: cp $(Pipeline.Workspace)/post_catalina/*.bottle.* $PWD/
         displayName: Retrieve previously built bottles
       - script: |
+          pushd "$(brew --repo)" && git fetch && git reset --hard origin/master && popd
           brew update
           .ci/bottle-formula-from-branch.sh
         displayName: Bottle formula on 10.14
         env:
           OS: '10.14'
           BRANCH: $(Build.SourceBranch)
-          HOMEBREW_BINTRAY_USER: dciabrin
-          HOMEBREW_BINTRAY_KEY: $(BINTRAY_KEY)
+          HOMEBREW_GITHUB_API_TOKEN: $(HOMEBREW_GITHUB_API_TOKEN)
       - script: cp git-bottle-sha.diff *.bottle.json *.bottle*.tar.gz $(Build.ArtifactStagingDirectory)/
         displayName: Capture built bottles for next job
       - publish: $(Build.ArtifactStagingDirectory)
@@ -68,8 +68,7 @@ jobs:
         displayName: Publish new bottles
         env:
           BRANCH: $(Build.SourceBranch)
-          HOMEBREW_BINTRAY_USER: dciabrin
-          HOMEBREW_BINTRAY_KEY: $(BINTRAY_KEY)
+          HOMEBREW_GITHUB_API_TOKEN: $(HOMEBREW_GITHUB_API_TOKEN)
       - script: .ci/publish-new-formula-version.sh
         displayName: Publish new Formula version
         env:

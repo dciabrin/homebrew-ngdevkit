@@ -18,10 +18,12 @@ test -f Formula/$pkg.rb
 # for other OS versions
 keepopt=$(if brew info --json dciabrin/ngdevkit/$pkg | jq '.[0].bottle | length' | grep -wq 1; then echo "--keep-old"; fi)
 
-# build bottle and upload it to bintray
+# build bottle and upload it to github
 rooturl=https://dl.bintray.com/dciabrin/bottles-ngdevkit
 cp Formula/$pkg.rb Formula/$pkg.rb.tmp
-brew test-bot $keepopt --skip-setup --root-url=$rooturl --bintray-org=dciabrin --tap=dciabrin/ngdevkit Formula/$pkg.rb
+
+echo "Build bottle with: brew test-bot $keepopt --skip-setup --tap=dciabrin/ngdevkit Formula/$pkg.rb --debug"
+brew test-bot $keepopt --skip-setup --tap=dciabrin/ngdevkit Formula/$pkg.rb --debug
 cp Formula/$pkg.rb.tmp Formula/$pkg.rb
-brew pr-upload --no-commit $keepopt --no-publish --root-url=$rooturl --bintray-org=dciabrin
+
 git diff | tee git-bottle-sha.diff
