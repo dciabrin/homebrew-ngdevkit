@@ -24,7 +24,8 @@ class NgdevkitGngeo < Formula
     ENV.deparallelize
     system "autoreconf", "-iv"
     system "./configure", "--prefix=#{prefix}",
-                          "--program-prefix=ngdevkit-"
+                          "--program-prefix=ngdevkit-",
+                          "CFLAGS=\"-Wno-implicit-function-declaration -DGNGEORC=\\\\\\\"ngdevkit-gngeorc\\\\\\\"\""
     gmake = "#{Formula["make"].opt_bin}/gmake"
     ENV["MAKE"] = gmake
     system gmake, "-j1", "pkgdatadir=#{share}/ngdevkit-gngeo"
