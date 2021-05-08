@@ -1,14 +1,14 @@
 class NgdevkitGngeo < Formula
   desc "Portable Neo-Geo emulator customized for ngdevkit"
   homepage "https://github.com/dciabrin/gngeo"
-  url "https://github.com/dciabrin/gngeo/archive/nightly-202103291733.tar.gz"
-  version "0.8.1+202103291733-1"
-  sha256 "b1d5ceffb6aee699013665d619b0231504b605d96087cdf6627e67b3ec27b46c"
+  url "https://github.com/dciabrin/gngeo/archive/nightly-202105061001.tar.gz"
+  version "0.8.1+202105061001-1"
+  sha256 "e0b393802a64a7841c30e1fb766417a4c95e38850b8a22f1ccf0bba5039830b9"
 
   bottle do
-    root_url "https://dl.bintray.com/dciabrin/bottles-ngdevkit"
-    sha256 catalina: "77f416920e5238833e9b09103eb1526f3f6ece15c83d00f304d153434920558b"
-    sha256 mojave:   "62737b85ed17bd9a99b6e22db54660d1d91efd17ba310938550f247fb9870b0e"
+    root_url "https://github.com/dciabrin/homebrew-ngdevkit/releases/download/ngdevkit-gngeo-0.8.1+202105061001-1"
+    sha256 catalina: "20c8ede29ebebd3cd7e5246199a5106c22937cead66a91f8255bfaea6d8f33c7"
+    sha256 mojave:   "024e5cdfa90a9f0ca5583f90b5d68082c4c3765cf3783c99b89b67d474249dfd"
   end
 
   depends_on "autoconf" => :build
@@ -25,7 +25,7 @@ class NgdevkitGngeo < Formula
     system "autoreconf", "-iv"
     system "./configure", "--prefix=#{prefix}",
                           "--program-prefix=ngdevkit-",
-                          "CFLAGS=\"-Wno-implicit-function-declaration -DGNGEORC=\\\\\\\"ngdevkit-gngeorc\\\\\\\"\""
+                          "CFLAGS=-Wno-implicit-function-declaration -DGNGEORC=\\\\\"ngdevkit-gngeorc\\\\\""
     gmake = "#{Formula["make"].opt_bin}/gmake"
     ENV["MAKE"] = gmake
     system gmake, "-j1", "pkgdatadir=#{share}/ngdevkit-gngeo"
