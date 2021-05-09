@@ -5,12 +5,6 @@ class NgdevkitToolchain < Formula
   version "0.1+202103251604-1"
   sha256 "cee9e9d523bccfc540cbbd3dc6644f52be95f9b13e225c67b8dbbc8a5437f8bd"
 
-  bottle do
-    root_url "https://dl.bintray.com/dciabrin/bottles-ngdevkit"
-    sha256 catalina: "8e7cb5504c8b28b2e76d3ddfcaf36c5824e1c9286fd50dffb5a748db0814d1db"
-    sha256 mojave:   "e9297ad645ce8da4d912c1a179213001cc265492226e4fc5176b653b0c17fc6e"
-  end
-
   depends_on "autoconf" => :build
   depends_on "automake" => :build
   depends_on "bison" => :build
