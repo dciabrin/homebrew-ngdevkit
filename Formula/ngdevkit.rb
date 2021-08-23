@@ -1,14 +1,14 @@
 class Ngdevkit < Formula
   desc "Open source development for Neo-Geo"
   homepage "https://github.com/dciabrin/ngdevkit"
-  url "https://github.com/dciabrin/ngdevkit/archive/nightly-202108211105.tar.gz"
-  version "0.2+202108211105-1"
-  sha256 "d44cfae75f4a65b78a6dfb6e4db971a6d6b0f6900d6cbd8a9dd2a4d5a69380b4"
+  url "https://github.com/dciabrin/ngdevkit/archive/nightly-202108231901.tar.gz"
+  version "0.2+202108231901-1"
+  sha256 "b29db9598745e9749804b1d513273d907c9e73f44762828b62d53443663c1f4d"
 
   bottle do
-    root_url "https://github.com/dciabrin/homebrew-ngdevkit/releases/download/ngdevkit-0.2+202108211105-1"
-    sha256 cellar: :any_skip_relocation, catalina: "a48ef3e0f5f6105b0cc3f9fab7b5128a2fcd21d64e3a57d0f915dd506c4d4661"
-    sha256 cellar: :any_skip_relocation, mojave:   "ee0e20a2a78f00a5a143ba806e5c8c82b64d7152542e8a8f051ee8a95c305779"
+    root_url "https://github.com/dciabrin/homebrew-ngdevkit/releases/download/ngdevkit-0.2+202108231901-1"
+    sha256 cellar: :any_skip_relocation, catalina: "640e11e6bed82a9264f67d0df8d894efa5dccd8b8fd16c7406c21f620a834ef6"
+    sha256 cellar: :any_skip_relocation, mojave:   "352e4ee81cea7afbdb8aaee1b2a18d6b266ef59607509433553ce4c50182e455"
   end
 
   depends_on "autoconf" => :build
