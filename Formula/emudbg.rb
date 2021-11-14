@@ -1,14 +1,14 @@
 class Emudbg < Formula
   desc "Emulator-agnostic source-level debugging API"
   homepage "https://github.com/dciabrin/emudbg"
-  url "https://github.com/dciabrin/emudbg/archive/nightly-202111140941.tar.gz"
-  version "0.2+202111140941-1"
-  sha256 "7710197725f5e68e70247e6a6fc34d368c7978984da8ec71291c9111d7aa67ea"
+  url "https://github.com/dciabrin/emudbg/archive/nightly-202111141535.tar.gz"
+  version "0.2+202111141535-1"
+  sha256 "5ac567efdca679dc46854581d87ab6f9b88fc920adbd1896cdb32c1dd233a443"
 
   bottle do
-    root_url "https://github.com/dciabrin/homebrew-ngdevkit/releases/download/emudbg-0.2+202111140941-1"
-    sha256 cellar: :any_skip_relocation, catalina: "8e208dffdb13609633f0c08f2a44fe1d88e3f250a97c30d0593b05244ad462a4"
-    sha256 cellar: :any_skip_relocation, mojave:   "775085d6bc5ef74a3602ed3f49b165f8a968a31db0d4f9d0481a39894314bcbc"
+    root_url "https://github.com/dciabrin/homebrew-ngdevkit/releases/download/emudbg-0.2+202111141535-1"
+    sha256 cellar: :any_skip_relocation, catalina: "ae49eddc1c14667a09aea7e7d2851eddaf916b86b353692d8a729f47ed2e6af8"
+    sha256 cellar: :any_skip_relocation, mojave:   "c2afb479849c9b17d3536cdbe00cb2d26f7daac99ee9163450dbb0bcbe4ccdd5"
   end
 
   depends_on "autoconf" => :build
