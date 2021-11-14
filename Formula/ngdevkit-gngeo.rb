@@ -1,14 +1,13 @@
 class NgdevkitGngeo < Formula
   desc "Portable Neo-Geo emulator customized for ngdevkit"
   homepage "https://github.com/dciabrin/gngeo"
-  url "https://github.com/dciabrin/gngeo/archive/nightly-202105061001.tar.gz"
-  version "0.8.1+202105061001-1"
-  sha256 "e0b393802a64a7841c30e1fb766417a4c95e38850b8a22f1ccf0bba5039830b9"
+  url "https://github.com/dciabrin/gngeo/archive/nightly-202111141627.tar.gz"
+  version "0.8.1+202111141627-1"
+  sha256 "7d80f3e4b80598530732e7fbafbcbe737ee4fa6d40744aa5595c26dc11e89c62"
 
   bottle do
-    root_url "https://github.com/dciabrin/homebrew-ngdevkit/releases/download/ngdevkit-gngeo-0.8.1+202105061001-1"
-    sha256 catalina: "20c8ede29ebebd3cd7e5246199a5106c22937cead66a91f8255bfaea6d8f33c7"
-    sha256 mojave:   "024e5cdfa90a9f0ca5583f90b5d68082c4c3765cf3783c99b89b67d474249dfd"
+    root_url "https://github.com/dciabrin/homebrew-ngdevkit/releases/download/ngdevkit-gngeo-0.8.1+202111141627-1"
+    sha256 catalina: "7ddf0b52ff858df4da04a1c25316c95a461671e0057efbfd6dbba143f8650694"
   end
 
   depends_on "autoconf" => :build
