@@ -2,12 +2,37 @@ trigger:
 - nightly/*
 
 jobs:
+  - job: bigsur
+    timeoutInMinutes: 150
+    displayName: "Bottle for macOS 11 (Big Sur)"
+    pool:
+      vmImage: 'macOS-11'
+    steps:
+      - script: |
+          pushd "$(brew --repo)" && git fetch && git reset --hard origin/master && popd
+          brew update
+          .ci/bottle-formula-from-branch.sh
+        displayName: Bottle formula on 11
+        env:
+          OS: '11'
+          BRANCH: $(Build.SourceBranch)
+          HOMEBREW_GITHUB_API_TOKEN: $(HOMEBREW_GITHUB_API_TOKEN)
+      - script: cp *.bottle.json *.bottle*.tar.gz $(Build.ArtifactStagingDirectory)/
+        displayName: Capture built bottles for next job
+      - publish: $(Build.ArtifactStagingDirectory)
+        artifact: post_bigsur
+
   - job: catalina
     timeoutInMinutes: 150
+    dependsOn: bigsur
     displayName: "Bottle for macOS 10.15 (Catalina)"
     pool:
       vmImage: 'macOS-10.15'
     steps:
+      - download: current
+        artifact: post_bigsur
+      - script: cp $(Pipeline.Workspace)/post_bigsur/*.bottle.* $PWD/
+        displayName: Retrieve previously built bottles
       - script: |
           pushd "$(brew --repo)" && git fetch && git reset --hard origin/master && popd
           brew update
@@ -17,50 +42,25 @@ jobs:
           OS: '10.15'
           BRANCH: $(Build.SourceBranch)
           HOMEBREW_GITHUB_API_TOKEN: $(HOMEBREW_GITHUB_API_TOKEN)
-      - script: cp *.bottle.json *.bottle*.tar.gz $(Build.ArtifactStagingDirectory)/
+      - script: cp git-bottle-sha.diff *.bottle.json *.bottle*.tar.gz $(Build.ArtifactStagingDirectory)/
         displayName: Capture built bottles for next job
       - publish: $(Build.ArtifactStagingDirectory)
         artifact: post_catalina
 
-  - job: mojave
-    timeoutInMinutes: 150
+  - job: publish
     dependsOn: catalina
-    displayName: "Bottle for macOS 10.14 (Mojave)"
+    displayName: "Publish new version and bottles"
     pool:
-      vmImage: 'macOS-10.14'
+      vmImage: 'macOS-11'
     steps:
+      - checkout: self
+        persistCredentials: true
       - download: current
         artifact: post_catalina
       - script: cp $(Pipeline.Workspace)/post_catalina/*.bottle.* $PWD/
         displayName: Retrieve previously built bottles
       - script: |
-          pushd "$(brew --repo)" && git fetch && git reset --hard origin/master && popd
-          brew update
-          .ci/bottle-formula-from-branch.sh
-        displayName: Bottle formula on 10.14
-        env:
-          OS: '10.14'
-          BRANCH: $(Build.SourceBranch)
-          HOMEBREW_GITHUB_API_TOKEN: $(HOMEBREW_GITHUB_API_TOKEN)
-      - script: cp git-bottle-sha.diff *.bottle.json *.bottle*.tar.gz $(Build.ArtifactStagingDirectory)/
-        displayName: Capture built bottles for next job
-      - publish: $(Build.ArtifactStagingDirectory)
-        artifact: post_mojave
-
-  - job: publish
-    dependsOn: mojave
-    displayName: "Publish new version and bottles"
-    pool:
-      vmImage: 'macOS-10.15'
-    steps:
-      - checkout: self
-        persistCredentials: true
-      - download: current
-        artifact: post_mojave
-      - script: cp $(Pipeline.Workspace)/post_mojave/*.bottle.* $PWD/
-        displayName: Retrieve previously built bottles
-      - script: |
-          patch -p1 < $(Pipeline.Workspace)/post_mojave/git-bottle-sha.diff
+          patch -p1 < $(Pipeline.Workspace)/post_catalina/git-bottle-sha.diff
           git add Formula/*.rb
           git commit --amend --no-edit
         displayName: Restore bottle hashes from previous job in git
@@ -76,7 +76,7 @@ jobs:
       - script: |
           branch=`echo $BRANCH | sed 's%refs/heads/%%'`
           pkg=`.ci/pkg-name-from-branch.sh $branch`
-          .ci/gc-nightly-branches.sh -u dciabrin -r emudbg -b '^refs/heads/nightly/'"$pkg"'-[0-9]*'
+          .ci/gc-nightly-branches.sh -u dciabrin -r "$pkg" -b '^refs/heads/nightly/'"$pkg"'-[0-9]*'
         displayName: Clean up old nightly branches
         env:
           BRANCH: $(Build.SourceBranch)
