@@ -10,7 +10,7 @@ jobs:
     steps:
       - script: |
           pushd "$(brew --repo)" && git fetch && git reset --hard origin/master && popd
-          brew update
+          .ci/setup-brew-environment.sh
           .ci/bottle-formula-from-branch.sh
         displayName: Bottle formula on 12
         env:
@@ -35,7 +35,7 @@ jobs:
         displayName: Retrieve previously built bottles
       - script: |
           pushd "$(brew --repo)" && git fetch && git reset --hard origin/master && popd
-          brew update
+          .ci/setup-brew-environment.sh
           .ci/bottle-formula-from-branch.sh
         displayName: Bottle formula on 11
         env:
