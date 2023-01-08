@@ -3,10 +3,10 @@ set -eu
 
 test -n "$BRANCH"
 
-branch=$(echo $BRANCH | sed 's%refs/heads/%%')
-pkg=$(.ci/pkg-name-from-branch.sh $branch)
-echo "Publishing new bottle for $pkg (branch $branch)"
+# the BRANCH info coming from Azure looks like 'refs/heads/nightly/pkg'
+pkg=$(.ci/pkg-name-from-branch.sh $BRANCH)
 test -f Formula/$pkg.rb
+echo "Publishing new bottle for $pkg"
 
 # commit the potential changes to the formula
 git add Formula/$pkg.rb
