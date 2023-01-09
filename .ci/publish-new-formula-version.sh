@@ -8,12 +8,13 @@ pkg=$(.ci/pkg-name-from-branch.sh $BRANCH)
 test -f Formula/$pkg.rb
 echo "Publishing new bottle for $pkg"
 
-# commit the potential changes to the formula
+# Add the bottle information into a new commit
 git add Formula/$pkg.rb
-git commit --amend --no-edit
+previous_subj=$(git log --pretty=format:%s HEAD~..HEAD)
+git commit --no-edit -m "${previous_subj} (bottled)"
 
 # merge from the detached branch to master
-git format-patch -1 -o new-version
+git format-patch -2 -o new-version
 git checkout master
 git am new-version/*
 git push
