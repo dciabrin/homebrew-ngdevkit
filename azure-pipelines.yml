@@ -11,7 +11,7 @@ jobs:
       - script: |
           pushd "$(brew --repo)" && git fetch && git reset --hard origin/master && popd
           .ci/setup-brew-environment.sh
-          .ci/bottle-formula-from-branch.sh
+          .ci/bottle-formula.sh
         displayName: Bottle formula on 12
         env:
           OS: '12'
@@ -36,7 +36,7 @@ jobs:
       - script: |
           pushd "$(brew --repo)" && git fetch && git reset --hard origin/master && popd
           .ci/setup-brew-environment.sh
-          .ci/bottle-formula-from-branch.sh
+          .ci/bottle-formula.sh
         displayName: Bottle formula on 11
         env:
           OS: '11'
@@ -61,15 +61,20 @@ jobs:
         displayName: Retrieve previously built bottles
       - script: |
           patch -p1 < $(Pipeline.Workspace)/post_bigsur/git-bottle-sha.diff
-          git add Formula/*.rb
-          git commit --amend --no-edit
         displayName: Restore bottle hashes from previous job in git
-      - script: .ci/publish-bottles.sh
-        displayName: Publish new bottles
-        env:
-          BRANCH: $(Build.SourceBranch)
-          HOMEBREW_GITHUB_API_TOKEN: $(HOMEBREW_GITHUB_API_TOKEN)
+      # Publishing the new version prior to the bottles, because
+      # the bottle are bundled in a github archive which comes
+      # with a new tag in the git repo. So all the patches must be
+      # prior to the bottles.
       - script: .ci/publish-new-formula-version.sh
         displayName: Publish new Formula version
         env:
           BRANCH: $(Build.SourceBranch)
+      # Until bottles are published, there's a small time window
+      # where 'brew install <pkg>' won't find bottles and rebuild
+      # from source. The inconvenience is assumed to be minimal.
+      - script: .ci/publish-new-formula-bottles.sh
+        displayName: Publish new bottles
+        env:
+          BRANCH: $(Build.SourceBranch)
+          HOMEBREW_GITHUB_API_TOKEN: $(HOMEBREW_GITHUB_API_TOKEN)
