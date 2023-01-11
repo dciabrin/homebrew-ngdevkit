@@ -1,5 +1,5 @@
 #!/bin/sh
-set -eux
+set -eu
 
 test -n "$BRANCH"
 
@@ -18,3 +18,6 @@ git format-patch -2 -o new-version
 git checkout master
 git am new-version/*
 git push
+
+echo
+echo "New formula version for $pkg published"

@@ -9,16 +9,17 @@ jobs:
       vmImage: 'macOS-12'
     steps:
       - script: |
-          pushd "$(brew --repo)" && git fetch && git reset --hard origin/master && popd
-          .ci/setup-brew-environment.sh
+          .ci/setup-brew-environment.sh --update
           .ci/bottle-formula.sh
         displayName: Bottle formula on 12
         env:
           OS: '12'
           BRANCH: $(Build.SourceBranch)
           HOMEBREW_GITHUB_API_TOKEN: $(HOMEBREW_GITHUB_API_TOKEN)
-      - script: cp *.bottle.json *.bottle*.tar.gz $(Build.ArtifactStagingDirectory)/
-        displayName: Capture built bottles for next job
+      - script: |
+          cp *.bottle.json *.bottle*.tar.gz $(Build.ArtifactStagingDirectory)/
+          git diff Formula/* | tee $(Build.ArtifactStagingDirectory)/git-bottle-sha.diff
+        displayName: Capture bottles and hashes for next job
       - publish: $(Build.ArtifactStagingDirectory)
         artifact: post_monterey
 
@@ -31,19 +32,22 @@ jobs:
     steps:
       - download: current
         artifact: post_monterey
-      - script: cp $(Pipeline.Workspace)/post_monterey/*.bottle.* $PWD/
-        displayName: Retrieve previously built bottles
       - script: |
-          pushd "$(brew --repo)" && git fetch && git reset --hard origin/master && popd
-          .ci/setup-brew-environment.sh
+          cp $(Pipeline.Workspace)/post_monterey/*.bottle.* $PWD/
+          patch -p1 < $(Pipeline.Workspace)/post_monterey/git-bottle-sha.diff
+        displayName: Retrieve bottles and hashes from previous job
+      - script: |
+          .ci/setup-brew-environment.sh --update
           .ci/bottle-formula.sh
         displayName: Bottle formula on 11
         env:
           OS: '11'
           BRANCH: $(Build.SourceBranch)
           HOMEBREW_GITHUB_API_TOKEN: $(HOMEBREW_GITHUB_API_TOKEN)
-      - script: cp git-bottle-sha.diff *.bottle.json *.bottle*.tar.gz $(Build.ArtifactStagingDirectory)/
-        displayName: Capture built bottles for next job
+      - script: |
+          cp *.bottle.json *.bottle*.tar.gz $(Build.ArtifactStagingDirectory)/
+          git diff Formula/* | tee $(Build.ArtifactStagingDirectory)/git-bottle-sha.diff
+        displayName: Capture bottles and hashes for next job
       - publish: $(Build.ArtifactStagingDirectory)
         artifact: post_bigsur
 
@@ -57,24 +61,22 @@ jobs:
         persistCredentials: true
       - download: current
         artifact: post_bigsur
-      - script: cp $(Pipeline.Workspace)/post_bigsur/*.bottle.* $PWD/
-        displayName: Retrieve previously built bottles
       - script: |
+          cp $(Pipeline.Workspace)/post_bigsur/*.bottle.* $PWD/
           patch -p1 < $(Pipeline.Workspace)/post_bigsur/git-bottle-sha.diff
-        displayName: Restore bottle hashes from previous job in git
+        displayName: Retrieve bottles and hashes from previous job
       # Publishing the new version prior to the bottles, because
       # the bottle are bundled in a github archive which comes
       # with a new tag in the git repo. So all the patches must be
       # prior to the bottles.
-      - script: .ci/publish-new-formula-version.sh
-        displayName: Publish new Formula version
-        env:
-          BRANCH: $(Build.SourceBranch)
       # Until bottles are published, there's a small time window
       # where 'brew install <pkg>' won't find bottles and rebuild
       # from source. The inconvenience is assumed to be minimal.
-      - script: .ci/publish-new-formula-bottles.sh
-        displayName: Publish new bottles
+      - script: |
+          .ci/setup-brew-environment.sh
+          .ci/publish-new-formula-version.sh
+          .ci/publish-new-formula-bottles.sh
+        displayName: Pubish Formula version and bottles
         env:
           BRANCH: $(Build.SourceBranch)
           HOMEBREW_GITHUB_API_TOKEN: $(HOMEBREW_GITHUB_API_TOKEN)
