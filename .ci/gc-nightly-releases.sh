@@ -65,8 +65,9 @@ fi
 CREDS=dciabrin:$GITHUB_TOKEN
 
 
-# ----------------- garbage-collect nightly releases for a specific package -----------------
-
+#
+# garbage-collect nightly releases for a specific package
+#
 releases=$(mktemp -t releases-XXXXXXX.json)
 
 
@@ -98,7 +99,6 @@ check "retrieving releases" $ret
 # Note: keep the two most recent nightly releases
 # to ease transition to newer releases
 names=$(jq -r '. | map(select(.name | sub("^(?<pkg>[^0-9]*)-.*"; "\(.pkg)") | test("^'"$PACKAGE"'$")) ) | sort_by(.updated_at) | .[] | .name' $releases)
-echo $names
 
 echo "Processing all releases found for package $PACKAGE..."
 num=0
@@ -110,7 +110,6 @@ for n in $names; do
     ((num++))
 done
 
-echo
 if [ $num -gt 2 ]; then
     echo "$(expr $num - 2) release(s) removed for package $PACKAGE"
 else
