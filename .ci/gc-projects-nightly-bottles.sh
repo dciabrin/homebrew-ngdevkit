@@ -1,12 +1,14 @@
 #!/bin/bash
 
-repos=$(git show --pretty="" --name-only | grep '^Formula/' | sed -e 's%^Formula/%%' -e 's%.rb$%%')
+packages=$(git show --pretty="" --name-only | grep '^Formula/' | sed -e 's%^Formula/%%' -e 's%.rb$%%')
 
-if [ -n "$repos" ]; then
-    echo "Cleaning up ngdevkit nightly releases"
+if [ -n "$packages" ]; then
+    echo "Cleaning up ngdevkit nightly releases for packages: $packages"
     echo
-    for r in $repos; do
-        .ci/gc-nightly-releases.sh --repo $r
+    for p in $packages; do
+        .ci/gc-nightly-releases.sh --package $p
         echo
     done
+else
+    echo "No Formula was updated in latest commit in current branch"    
 fi
