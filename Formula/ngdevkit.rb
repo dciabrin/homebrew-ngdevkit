@@ -1,5 +1,5 @@
 class Ngdevkit < Formula
-  desc "Open source development for Neo-Geo"
+  desc "Open source development for Neo-Geo - test"
   homepage "https://github.com/dciabrin/ngdevkit"
   url "https://github.com/dciabrin/ngdevkit/archive/nightly-202212301452.tar.gz"
   version "0.2+202212301452-4"

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-packages=$(git show --pretty="" --name-only | grep '^Formula/' | sed -e 's%^Formula/%%' -e 's%.rb$%%')
+packages=$(git show --pretty="" --name-only | grep '^Formula/' | sed -e 's%^Formula/%%' -e 's%.rb$%%' | xargs echo)
 
 if [ -n "$packages" ]; then
     echo "Cleaning up ngdevkit nightly releases for packages: $packages"
