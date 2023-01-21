@@ -39,19 +39,12 @@ trap cleanup EXIT
 GITHUB_TOKEN=${GH_TOKEN:-}
 DRYRUN=
 
-OPTS=$(/usr/bin/getopt -n $0 --long help,dry-run,package:,token: -- $0 $@)
-if [ $? != 0 ]; then
-    error "parsing arguments failed"
-fi
-
-eval set -- "$OPTS"
 while true; do
-    case "$1" in
+    case "${1:-}" in
         --help) help;;
         --dry-run ) DRYRUN=1; shift ;;
         --package ) PACKAGE="$2"; shift 2 ;;
         --token ) GITHUB_TOKEN="$2"; shift 2 ;;
-        -- ) shift; break ;;
         * ) break ;;
     esac
 done
