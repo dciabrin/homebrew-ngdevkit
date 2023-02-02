@@ -13,9 +13,17 @@ git add Formula/$pkg.rb
 previous_subj=$(git log --pretty=format:%s HEAD~..HEAD)
 git commit --no-edit -m "${previous_subj} (bottled)"
 
-# merge from the detached branch to master
-git format-patch -2 -o new-version
+# Save the new commit before merging it to master
+git format-patch -1 -o new-version
+
+# Ensure that CI has fetched all the refs we need
+git fetch --all
+
+# Merge the original commit as a fast forward to avoid diverging
 git checkout master
+git merge origin/nightly/$pkg --ff-only
+
+# Apply the new commit on top
 git am new-version/*
 git push
 
