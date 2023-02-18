@@ -43,6 +43,8 @@ git_checkout() {
     fi
 }
 
+echo "Brew nightly build script invoked with \"$0 $*\""
+echo "---"
 
 while true; do
     case "${1:-}" in
@@ -58,10 +60,7 @@ done
 
 
 HOMEBREW_BASEDIR=$(dirname $(dirname $0))
-
-echo "Brew nightly build script invoked with \"$0 $*\""
 echo "Brew formulas location: ${HOMEBREW_BASEDIR}/Formula"
-echo "---"
 
 
 if [ -z "${PKG:-}" ]; then
@@ -93,7 +92,7 @@ echo "Last released version for ${PKG}: ${HEAD_VERSION}"
 
 
 # CI: Use the right credentials for git
-if [ -n "${GH_TOKEN:-}"]; then
+if [ -n "${GH_TOKEN:-}" ]; then
     export GIT_ASKPASS=$(realpath ${HOMEBREW_BASEDIR}/.ci/git-ask-pass.sh)
 fi
 
