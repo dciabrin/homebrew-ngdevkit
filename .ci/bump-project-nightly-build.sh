@@ -105,7 +105,7 @@ echo "Last commit timestamp for ${PKG} in branch ${MASTER_BRANCH}: ${HEAD_COMMIT
 NIGHTLY_TAG=nightly-$HEAD_COMMIT_DATE
 if ! (git tag -l | grep -q $NIGHTLY_TAG); then
     echo "Creating GitHub archive version '${NIGHTLY_TAG}' for tip of branch '${MASTER_BRANCH}'"
-    if [ -n "${PUSH_TAG:-}" ]; then
+    if [ -z "${PUSH_TAG:-}" ]; then
         echo "Not tagging source repository because --push-tag option is disabled. Bailing out"
         exit 0
     fi
