@@ -32,11 +32,11 @@ if [ -n "${UPDATE:-}" ]; then
     #    Error: The `brew link` step did not complete successfully
     #    Could not symlink bin/2to3
     set -x
-    rm -f /usr/local/bin/2to3
-    rm -f /usr/local/bin/idle3
-    rm -f /usr/local/bin/pydoc3
-    rm -f /usr/local/bin/python3
-    rm -f /usr/local/bin/python3-config
+    rm -f /usr/local/bin/2to3 /usr/local/bin/2to3-3.*
+    rm -f /usr/local/bin/idle3 /usr/local/bin/idle3.*
+    rm -f /usr/local/bin/pydoc3 /usr/local/bin/pydoc3.*
+    rm -f /usr/local/bin/python3 /usr/local/bin/python3.*
+    rm -f /usr/local/bin/python3-config /usr/local/bin/python3-config.*
 fi
 
 brewpwd=$(brew --repo dciabrin/ngdevkit)
