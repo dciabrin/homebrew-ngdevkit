@@ -33,9 +33,8 @@ jobs:
       - download: current
         artifact: post_monterey
       - script: |
-          cp $(Pipeline.Workspace)/post_monterey/*.bottle.* $PWD/
           patch -p1 < $(Pipeline.Workspace)/post_monterey/git-bottle-sha.diff
-        displayName: Retrieve bottles and hashes from previous job
+        displayName: Retrieve hashes from previous job
       - script: |
           .ci/setup-brew-environment.sh --update
           .ci/bottle-formula.sh
@@ -45,6 +44,7 @@ jobs:
           BRANCH: $(Build.SourceBranch)
           HOMEBREW_GITHUB_API_TOKEN: $(HOMEBREW_GITHUB_API_TOKEN)
       - script: |
+          cp $(Pipeline.Workspace)/post_monterey/*.bottle.* $PWD/
           cp *.bottle.json *.bottle*.tar.gz $(Build.ArtifactStagingDirectory)/
           git diff Formula/* | tee $(Build.ArtifactStagingDirectory)/git-bottle-sha.diff
         displayName: Capture bottles and hashes for next job
