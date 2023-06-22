@@ -1,9 +1,9 @@
 class NgdevkitToolchain < Formula
   desc "Toolchain for ngdevkit"
   homepage "https://github.com/dciabrin/ngdevkit-toolchain"
-  url "https://github.com/dciabrin/ngdevkit-toolchain/archive/nightly-202306221434.tar.gz"
-  version "0.1+202306221434-1"
-  sha256 "49c5d50b9a90e79942fd26af811398d16c0228871485a41562a49729d01a4b16"
+  url "https://github.com/dciabrin/ngdevkit-toolchain/archive/nightly-202306222008.tar.gz"
+  version "0.1+202306222008-1"
+  sha256 "c1498b7134ce31bbda612e95197bccf56e2d14653f48f1125721f74205d598ff"
 
   depends_on "autoconf" => :build
   depends_on "automake" => :build
