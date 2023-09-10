@@ -35,7 +35,8 @@ class NgdevkitGngeo < Formula
     system "autoreconf", "-iv"
     system "./configure", "--prefix=#{prefix}",
                           "--program-prefix=ngdevkit-",
-                          "CFLAGS=-I#{HOMEBREW_PREFIX}/include -Wno-implicit-function-declaration -DGNGEORC=\\\\\"ngdevkit-gngeorc\\\\\""
+                          "CFLAGS=-I#{HOMEBREW_PREFIX}/include -Wno-implicit-function-declaration " \
+                          "-DGNGEORC=\\\\\"ngdevkit-gngeorc\\\\\""
     system gmake, "pkgdatadir=#{share}/ngdevkit-gngeo"
     system gmake, "install", "pkgdatadir=#{share}/ngdevkit-gngeo"
   end
