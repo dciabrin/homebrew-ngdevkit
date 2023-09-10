@@ -34,21 +34,22 @@ class NgdevkitToolchain < Formula
   depends_on "readline" => :recommended
 
   def install
+    # We require gnu make > 4.0, so use the one from brew
     gmake = "#{Formula["make"].opt_bin}/gmake"
     ENV["MAKE"] = gmake
-    silent_flags = "-fno-show-source-location -fno-caret-diagnostics -fno-color-diagnostics " \
-                   "-fno-elide-type -fno-diagnostics-fixit-info -Wno-array-bounds " \
-                   "-Wno-unused-command-line-argument -Wno-implicit-function-declaration"
-    ENV["CFLAGS"] = silent_flags
-    ENV["CXXFLAGS"] = silent_flags
-    ENV["CPPFLAGS"] = silent_flags
-    # travis cut job when they are too verbose, so cut
-    # the output drastically until we find a better
-    # way to limit the compilation logs
+
+    # For M1 macs, brew libraries are installed in a non-standard
+    # location, so some env vars must be set for autotools
+    # ACLOCAL_PATH and PKG_CONFIG_PATH are set by brew
+    ENV["CFLAGS"] = "-I#{HOMEBREW_PREFIX}/include"
+    ENV["CXXFLAGS"] = "-I#{HOMEBREW_PREFIX}/include"
+    ENV["CPPFLAGS"] = "-I#{HOMEBREW_PREFIX}/include"
+    ENV["LDFLAGS"] = "-L#{HOMEBREW_PREFIX}/lib -Wl,-rpath,#{HOMEBREW_PREFIX}/lib"
+
+    # extra_cmd = " | awk '{printf \".\"; fflush()}'"
     gnu_mirror = "https://mirror.checkdomain.de/gnu"
     newlib_mirror = "https://ftp.gwdg.de/pub/linux/sources.redhat.com"
-    system gmake + " -- prefix=#{prefix} GNU_MIRROR=#{gnu_mirror} NEWLIB_MIRROR=#{newlib_mirror} |" \
-                 + " awk '{printf \".\"; fflush()}'"
+    system gmake + " -- prefix=#{prefix} GNU_MIRROR=#{gnu_mirror} NEWLIB_MIRROR=#{newlib_mirror}"
     system gmake + " install -- prefix=#{prefix}"
   end
 

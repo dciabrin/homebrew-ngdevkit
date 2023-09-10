@@ -20,8 +20,18 @@ class Ngdevkit < Formula
   depends_on "python3"
 
   def install
+    # We require gnu make > 4.0, so use the one from brew
     gmake = "#{Formula["make"].opt_bin}/gmake"
     ENV["MAKE"] = gmake
+
+    # For M1 macs, brew libraries are installed in a non-standard
+    # location, so some env vars must be set for autotools
+    # ACLOCAL_PATH and PKG_CONFIG_PATH are set by brew
+    ENV["CFLAGS"] = "-I#{HOMEBREW_PREFIX}/include"
+    ENV["CXXFLAGS"] = "-I#{HOMEBREW_PREFIX}/include"
+    ENV["CPPFLAGS"] = "-I#{HOMEBREW_PREFIX}/include"
+    ENV["LDFLAGS"] = "-L#{HOMEBREW_PREFIX}/lib -Wl,-rpath,#{HOMEBREW_PREFIX}/lib"
+
     system "autoreconf", "-iv"
     system "./configure", "--prefix=#{prefix}",
            "--enable-external-toolchain",

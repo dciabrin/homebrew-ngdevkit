@@ -21,14 +21,22 @@ class NgdevkitGngeo < Formula
   depends_on "sdl2"
 
   def install
-    ENV.deparallelize
+    # We require gnu make > 4.0, so use the one from brew
+    gmake = "#{Formula["make"].opt_bin}/gmake"
+    ENV["MAKE"] = gmake
+
+    # For M1 macs, brew libraries are installed in a non-standard
+    # location, so some env vars must be set for autotools
+    # ACLOCAL_PATH and PKG_CONFIG_PATH are set by brew
+    ENV["CXXFLAGS"] = "-I#{HOMEBREW_PREFIX}/include"
+    ENV["CPPFLAGS"] = "-I#{HOMEBREW_PREFIX}/include"
+    ENV["LDFLAGS"] = "-L#{HOMEBREW_PREFIX}/lib -Wl,-rpath,#{HOMEBREW_PREFIX}/lib"
+
     system "autoreconf", "-iv"
     system "./configure", "--prefix=#{prefix}",
                           "--program-prefix=ngdevkit-",
-                          "CFLAGS=-Wno-implicit-function-declaration -DGNGEORC=\\\\\"ngdevkit-gngeorc\\\\\""
-    gmake = "#{Formula["make"].opt_bin}/gmake"
-    ENV["MAKE"] = gmake
-    system gmake, "-j1", "pkgdatadir=#{share}/ngdevkit-gngeo"
+                          "CFLAGS=-I#{HOMEBREW_PREFIX}/include -Wno-implicit-function-declaration -DGNGEORC=\\\\\"ngdevkit-gngeorc\\\\\""
+    system gmake, "pkgdatadir=#{share}/ngdevkit-gngeo"
     system gmake, "install", "pkgdatadir=#{share}/ngdevkit-gngeo"
   end
 
