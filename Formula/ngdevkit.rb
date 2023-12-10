@@ -1,7 +1,7 @@
 class Ngdevkit < Formula
   desc "Open source development for Neo-Geo"
   homepage "https://github.com/dciabrin/ngdevkit"
-  url "https://github.com/dciabrin/ngdevkit/archive/nightly-202309150839.tar.gz"
+  url "https://github.com/dciabrin/ngdevkit/archive/refs/tags/nightly-202309150839.tar.gz"
   version "0.3+202309150839-1"
   sha256 "ede3ea581318ed3f947923fd80c7d8c6fe2561a5e40834e5fd6624ecd15a8bf1"
 

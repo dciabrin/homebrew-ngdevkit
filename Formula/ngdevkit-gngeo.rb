@@ -1,7 +1,7 @@
 class NgdevkitGngeo < Formula
   desc "Portable Neo-Geo emulator customized for ngdevkit"
   homepage "https://github.com/dciabrin/gngeo"
-  url "https://github.com/dciabrin/gngeo/archive/nightly-202305160925.tar.gz"
+  url "https://github.com/dciabrin/gngeo/archive/refs/tags/nightly-202305160925.tar.gz"
   version "0.8.1+202305160925-2"
   sha256 "d79b6e1279f54cf0efa04f2c0698b16e46a2d0ff499c29856bcf9f49350412fa"
 

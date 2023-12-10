@@ -1,7 +1,7 @@
 class Emudbg < Formula
   desc "Emulator-agnostic source-level debugging API"
   homepage "https://github.com/dciabrin/emudbg"
-  url "https://github.com/dciabrin/emudbg/archive/nightly-202305151016.tar.gz"
+  url "https://github.com/dciabrin/emudbg/archive/refs/tags/nightly-202305151016.tar.gz"
   version "0.2+202305151016-2"
   sha256 "49a294ac41194559f6a59271fa9a15d457833e2ebc4bb3ed86121d567f89d4e9"
 

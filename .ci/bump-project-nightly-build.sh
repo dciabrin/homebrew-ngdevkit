@@ -126,7 +126,7 @@ else
     echo "GitHub archive version '${NIGHTLY_TAG}' for branch '${MASTER_BRANCH}' already exists, keep tag"
 fi
 
-ARCHIVE=$(echo "https://github.com/dciabrin/$PKG/archive/${NIGHTLY_TAG}.tar.gz" | sed 's/ngdevkit-gngeo/gngeo/')
+ARCHIVE=$(echo "https://github.com/dciabrin/$PKG/archive/refs/tags/${NIGHTLY_TAG}.tar.gz" | sed 's/ngdevkit-gngeo/gngeo/')
 echo "New Brew formula for package ${PKG} will be based on source archive ${ARCHIVE}"
 
 cd $HOMEBREW_BASEDIR
