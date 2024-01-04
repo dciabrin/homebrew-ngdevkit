@@ -17,6 +17,7 @@ class Ngdevkit < Formula
   depends_on "ngdevkit-toolchain"
   depends_on "pkg-config"
   depends_on "python3"
+  depends_on "pyyaml"
 
   def install
     # We require gnu make > 4.0, so use the one from brew
