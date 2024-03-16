@@ -2,13 +2,8 @@ class NgdevkitToolchain < Formula
   desc "Toolchain for ngdevkit"
   homepage "https://github.com/dciabrin/ngdevkit-toolchain"
   url "https://github.com/dciabrin/ngdevkit-toolchain/archive/refs/tags/nightly-202403151912.tar.gz"
-  version "0.1+202403151912-1"
+  version "0.1+202403151912-2"
   sha256 "ead1c14ae8720e4b71d0b39d276fecea7902a99f17d0da1cf40b6db7ed9f21a7"
-
-  bottle do
-    root_url "https://github.com/dciabrin/homebrew-ngdevkit/releases/download/ngdevkit-toolchain-0.1+202403151912-1"
-    sha256 monterey: "ece681a8d5a34d263b9d628be97da0c757c9b0bf46c767ab72b4ecc7783e2e4b"
-  end
 
   depends_on "autoconf" => :build
   depends_on "automake" => :build
@@ -25,6 +20,7 @@ class NgdevkitToolchain < Formula
   depends_on "gettext"
   depends_on "gmp"
   depends_on "gnu-sed"
+  depends_on "isl"
   depends_on "libmpc"
   depends_on "mpfr"
   depends_on "ncurses"
@@ -46,7 +42,6 @@ class NgdevkitToolchain < Formula
     ENV["CPPFLAGS"] = "-I#{HOMEBREW_PREFIX}/include"
     ENV["LDFLAGS"] = "-L#{HOMEBREW_PREFIX}/lib -Wl,-rpath,#{HOMEBREW_PREFIX}/lib"
 
-    # extra_cmd = " | awk '{printf \".\"; fflush()}'"
     gnu_mirror = "https://mirror.checkdomain.de/gnu"
     newlib_mirror = "https://ftp.gwdg.de/pub/linux/sources.redhat.com"
     system gmake + " -- prefix=#{prefix} GNU_MIRROR=#{gnu_mirror} NEWLIB_MIRROR=#{newlib_mirror}"
