@@ -5,6 +5,11 @@ class Ngdevkit < Formula
   version "0.4+202405171732-1"
   sha256 "2116df6b71a36d8b2954b2db226c23ffff33a0fe4341be97a2e01730cd75b507"
 
+  bottle do
+    root_url "https://github.com/dciabrin/homebrew-ngdevkit/releases/download/ngdevkit-0.4+202405171732-1"
+    sha256 cellar: :any_skip_relocation, monterey: "85e1c77524f9e4530a21994c22d5ed71437bb70bb20e1da02df44ea245a23f25"
+  end
+
   depends_on "autoconf" => :build
   depends_on "automake" => :build
   depends_on "make" => :build
