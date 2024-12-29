@@ -1,0 +1,96 @@
+name: Build bottles for Homebrew formula
+on:
+  push:
+    branches:
+      - nightly/*
+jobs:
+  current_os:
+    name: "Current macOS"
+    runs-on: macos-15
+    env:
+      OS: '15'
+      BRANCH: ${{ github.ref }}
+      HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.GH_TOKEN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Bottle formula
+        run: |
+          rm -rf .github
+          .ci/setup-brew-environment.sh --update
+          .ci/bottle-formula.sh
+          git diff Formula/* | tee bottle-current.diff
+
+      - name: Capture bottle and hashe for next job
+        uses: actions/upload-artifact@v4
+        with:
+          name: bottle_current
+          path: |
+            bottle-current.diff
+            *.bottle.json
+            *.bottle*.tar.gz
+
+  previous_os:
+    name: "Previous macOS"
+    runs-on: macos-14
+    env:
+      OS: '14'
+      BRANCH: ${{ github.ref }}
+      HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.GH_TOKEN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Bottle formula
+        run: |
+          rm -rf .github
+          .ci/setup-brew-environment.sh --update
+          .ci/bottle-formula.sh
+          git diff Formula/* | tee bottle-previous.diff
+
+      - name: Capture bottles and hashes for next job
+        uses: actions/upload-artifact@v4
+        with:
+          name: bottle_previous
+          path: |
+            bottle-previous.diff
+            *.bottle.json
+            *.bottle*.tar.gz
+        
+  publish:
+    name: "Publish new version and bottles"
+    runs-on: macos-latest
+    needs: [current_os, previous_os]
+    env:
+      BRANCH: ${{ github.ref }}
+      HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.GH_TOKEN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Retrieve bottle data for current macOS
+        uses: actions/download-artifact@v4
+        with:
+          name: bottle_current
+
+      - name: Retrieve bottle data for previous macOS
+        uses: actions/download-artifact@v4
+        with:
+          name: bottle_previous
+
+      # Publishing the new version prior to the bottles, because
+      # the bottle are bundled in a github archive which comes
+      # with a new tag in the git repo. So all the patches must be
+      # prior to the bottles.
+      # Until bottles are published, there's a small time window
+      # where 'brew install <pkg>' won't find bottles and rebuild
+      # from source. The inconvenience is assumed to be minimal.
+      - name: Publish Formula version and bottles
+        run: |
+          .ci/setup-brew-environment.sh
+          .ci/add-bottles-info-into-formula.sh
+          .ci/publish-new-formula-version.sh
+          .ci/publish-new-formula-bottles.sh
