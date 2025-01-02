@@ -5,6 +5,12 @@ class NgdevkitGngeo < Formula
   version "0.8.1+202403151751-2"
   sha256 "e2ab3246c6473f6917f2d4f549a52fe2d8153f36db2d5f0beb18ace46bb0f085"
 
+  bottle do
+    root_url "https://github.com/dciabrin/homebrew-ngdevkit/releases/download/ngdevkit-gngeo-0.8.1+202403151751-2"
+    sha256 arm64_sequoia: "439d6be2eb0264742f288647e7de5e894f407e6e045eb4f3fa01e9945810a321"
+    sha256 arm64_sonoma:  "1fdf5fe0ec2e4cd8c0abfd82acd8446f4b1d4e83b3342537f46aa99f0f835c0f"
+  end
+
   depends_on "autoconf" => :build
   depends_on "autoconf-archive" => :build
   depends_on "automake" => :build
