@@ -1,14 +1,9 @@
 class Ngdevkit < Formula
   desc "Open source development for Neo-Geo"
   homepage "https://github.com/dciabrin/ngdevkit"
-  url "https://github.com/dciabrin/ngdevkit/archive/refs/tags/nightly-202406261816.tar.gz"
-  version "0.4+202406261816-1"
-  sha256 "d9fe9dbba43d1580a5ed40ca79b1b0d5eda9a64a24350624d58686667f5b41ca"
-
-  bottle do
-    root_url "https://github.com/dciabrin/homebrew-ngdevkit/releases/download/ngdevkit-0.4+202406261816-1"
-    sha256 cellar: :any_skip_relocation, monterey: "e0db928c4d9cb0f8332c4ef324647c240de83e013a413ea342b10cbd86e0e168"
-  end
+  url "https://github.com/dciabrin/ngdevkit/archive/refs/tags/nightly-202412282113.tar.gz"
+  version "0.4+202412282113-1"
+  sha256 "3e5ae9f518469868aba3d05e2d1fa6dfccd4ae4132d531f7d94e2d8df3255f5f"
 
   depends_on "autoconf" => :build
   depends_on "automake" => :build
@@ -17,7 +12,6 @@ class Ngdevkit < Formula
   depends_on "ngdevkit-toolchain"
   depends_on "pkg-config"
   depends_on "python3"
-  depends_on "pyyaml"
 
   def install
     # We require gnu make > 4.0, so use the one from brew
