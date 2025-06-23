@@ -1,15 +1,9 @@
 class NgdevkitToolchain < Formula
   desc "Toolchain for ngdevkit"
   homepage "https://github.com/dciabrin/ngdevkit-toolchain"
-  url "https://github.com/dciabrin/ngdevkit-toolchain/archive/refs/tags/nightly-202502202107.tar.gz"
-  version "0.1+202502202107-1"
-  sha256 "d8d67f4937ffb4b3e1000af3d6cecee3e2f38b2a5ea2a830c2846ec32575270e"
-
-  bottle do
-    root_url "https://github.com/dciabrin/homebrew-ngdevkit/releases/download/ngdevkit-toolchain-0.1+202502202107-1"
-    sha256 arm64_sequoia: "7bf22dedbf9a2376227f38ea88da9aefb6c751a8b011566247fc6cf6f7a8a4ac"
-    sha256 arm64_sonoma:  "6dc6c547888d86c5c0c6c08578bb01a294ab64cf2834908a3231c3b31a974430"
-  end
+  url "https://github.com/dciabrin/ngdevkit-toolchain/archive/refs/tags/nightly-202506231313.tar.gz"
+  version "0.1+202506231313-1"
+  sha256 "f5be1f9d56704bc89a2dd7169539d12bcf4f8ededf2d5f422a46555afb21436e"
 
   depends_on "autoconf" => :build
   depends_on "automake" => :build
