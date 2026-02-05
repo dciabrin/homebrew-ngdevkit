@@ -31,9 +31,10 @@ class NgdevkitToolchain < Formula
   depends_on "mpfr"
   depends_on "ncurses"
   depends_on "xz"
-  depends_on "zlib"
   depends_on "zstd"
   depends_on "readline" => :recommended
+
+  uses_from_macos "zlib"
 
   def install
     # We require gnu make > 4.0, so use the one from brew
