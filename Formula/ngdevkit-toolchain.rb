@@ -2,14 +2,8 @@ class NgdevkitToolchain < Formula
   desc "Toolchain for ngdevkit"
   homepage "https://github.com/dciabrin/ngdevkit-toolchain"
   url "https://github.com/dciabrin/ngdevkit-toolchain/archive/refs/tags/nightly-202602051135.tar.gz"
-  version "0.1+202602051135-1"
+  version "0.1+202602051135-2"
   sha256 "dfacfab7749a86a7bb8ecfa63c94d10dc93ce5aa678e66c28d31199b3c56284d"
-
-  bottle do
-    root_url "https://github.com/dciabrin/homebrew-ngdevkit/releases/download/ngdevkit-toolchain-0.1+202602051135-1"
-    sha256 arm64_sequoia: "74e8f2d734df2d30ed0a8cb6f5ccbbee3e4843181e9ffa70f983a369cf96b232"
-    sha256 arm64_sonoma:  "48a72ac0f58377baac0e749776a6c8cd50b218c7eb46a9b54d9407d08052c21e"
-  end
 
   depends_on "autoconf" => :build
   depends_on "automake" => :build
@@ -30,9 +24,9 @@ class NgdevkitToolchain < Formula
   depends_on "libmpc"
   depends_on "mpfr"
   depends_on "ncurses"
+  depends_on "readline"
   depends_on "xz"
   depends_on "zstd"
-  depends_on "readline" => :recommended
 
   uses_from_macos "zlib"
 
