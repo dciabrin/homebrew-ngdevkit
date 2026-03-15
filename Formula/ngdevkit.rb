@@ -1,15 +1,11 @@
 class Ngdevkit < Formula
+  include Language::Python::Virtualenv
+
   desc "Open source development for Neo-Geo"
   homepage "https://github.com/dciabrin/ngdevkit"
   url "https://github.com/dciabrin/ngdevkit/archive/refs/tags/nightly-202603131705.tar.gz"
-  version "0.4+202603131705-1"
+  version "0.4+202603131705-2"
   sha256 "aac8bcbf37de2e125f42f8a6fd706152192395f6dfe42cdecc34042550abf199"
-
-  bottle do
-    root_url "https://github.com/dciabrin/homebrew-ngdevkit/releases/download/ngdevkit-0.4+202603131705-1"
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "b4fce46c2afa07433dce5ad85cd55cfedf862e0789cca8b5f34851f37298b622"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "ac8de93214fa3c7de13787240e70b8f492de5e6e7e6868b6f13c3cb63f64c0ca"
-  end
 
   depends_on "autoconf" => :build
   depends_on "automake" => :build
@@ -19,9 +15,21 @@ class Ngdevkit < Formula
   depends_on "ngdevkit-toolchain"
   depends_on "pillow"
   depends_on "pkg-config"
-  depends_on "python3"
+  depends_on "python@3.14"
+
+  resource "ruamel-yaml" do
+    url "https://files.pythonhosted.org/packages/c7/3b/ebda527b56beb90cb7652cb1c7e4f91f48649fbcd8d2eb2fb6e77cd3329b/ruamel_yaml-0.19.1.tar.gz"
+    sha256 "53eb66cd27849eff968ebf8f0bf61f46cdac2da1d1f3576dd4ccee9b25c31993"
+  end
 
   def install
+    # Some python dependencies are not available as brew packages, so we
+    # install them via pip in a dedicated venv, which will land in libexec.
+    # The original ngdevkit file wills land in /usr/lib, except the python
+    # scripts (and stuff from exec-prefix), which also land in libexec.
+    venv = virtualenv_create(libexec, "python3")
+    venv.pip_install resource("ruamel-yaml")
+
     # We require gnu make > 4.0, so use the one from brew
     gmake = "#{Formula["make"].opt_bin}/gmake"
     ENV["MAKE"] = gmake
@@ -46,6 +54,12 @@ class Ngdevkit < Formula
            "--enable-examples=no"
     system gmake
     system gmake, "install"
+
+    # Lastly, let brew generate stubs for all the python scripts in ngdevkit.
+    # Those stubs set up PYTHONPATH and run the real scripts automatically.
+    ENV.prepend_create_path "PYTHONPATH", libexec/"lib/python3.14/site-packages"
+    bin.install Dir[libexec/"bin/*.py"]
+    bin.env_script_all_files(libexec/"bin", PYTHONPATH: ENV["PYTHONPATH"])
   end
 
   test do
