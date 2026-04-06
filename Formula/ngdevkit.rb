@@ -3,15 +3,9 @@ class Ngdevkit < Formula
 
   desc "Open source development for Neo-Geo"
   homepage "https://github.com/dciabrin/ngdevkit"
-  url "https://github.com/dciabrin/ngdevkit/archive/refs/tags/nightly-202603302109.tar.gz"
-  version "0.4+202603302109-1"
-  sha256 "74ceba849660b6d49ea28431a662365f26bbafc462e83eb82fe922205471c983"
-
-  bottle do
-    root_url "https://github.com/dciabrin/homebrew-ngdevkit/releases/download/ngdevkit-0.4+202603302109-1"
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "4a652c4812cde0fdede8bbd597abc9654c63ea7b296492a587e140cecfdd3c82"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma:  "1ce4bf30b8085edc92ef8aa3b91d3cb8ad9434296b9f8658bbb17a8b8adebfc2"
-  end
+  url "https://github.com/dciabrin/ngdevkit/archive/refs/tags/nightly-202604060732.tar.gz"
+  version "0.4+202604060732-1"
+  sha256 "34b36f8a12e39a4a1c46ca5d6d616e60cdefeba3c199913ccf75d84c2d475c81"
 
   depends_on "autoconf" => :build
   depends_on "automake" => :build
