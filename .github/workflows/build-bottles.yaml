@@ -13,7 +13,7 @@ jobs:
       HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.GH_TOKEN }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Bottle formula
         run: |
@@ -23,7 +23,7 @@ jobs:
           git diff Formula/* | tee bottle-current.diff
 
       - name: Capture bottle and hashe for next job
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: bottle_current
           path: |
@@ -40,7 +40,7 @@ jobs:
       HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.GH_TOKEN }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Bottle formula
         run: |
@@ -50,7 +50,7 @@ jobs:
           git diff Formula/* | tee bottle-previous.diff
 
       - name: Capture bottles and hashes for next job
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: bottle_previous
           path: |
@@ -67,7 +67,7 @@ jobs:
       HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.GH_TOKEN }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -77,7 +77,7 @@ jobs:
           name: bottle_current
 
       - name: Retrieve bottle data for previous macOS
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: bottle_previous
 

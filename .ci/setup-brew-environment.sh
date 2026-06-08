@@ -51,3 +51,8 @@ echo "Make brew use this repository as the current ngdevkit tap"
 mkdir -p $(dirname $brewpwd)
 # link current repo to .../dciabrin/ngdevkit
 ln -s $PWD $brewpwd
+
+# brew bot now performs checks against the tip of the branch, so
+# make sure this is pulled
+echo "Fetch additional tags for brew test-bot"
+git fetch --depth=1 origin HEAD:refs/remotes/origin/HEAD
