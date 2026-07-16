@@ -3,9 +3,9 @@ class Ngdevkit < Formula
 
   desc "Open source development for Neo-Geo"
   homepage "https://github.com/dciabrin/ngdevkit"
-  url "https://github.com/dciabrin/ngdevkit/archive/refs/tags/nightly-202607101714.tar.gz"
-  version "0.5+202607101714-1"
-  sha256 "92b21674f9a6e3d686ac807db9af181848e601980d243d107a0fac5979fd9cef"
+  url "https://github.com/dciabrin/ngdevkit/archive/refs/tags/nightly-202607161949.tar.gz"
+  version "0.5+202607161949-1"
+  sha256 "e5003fb5224f28510efa56e702c88b679535a07f127a3917e658620ad4a020f6"
 
   depends_on "autoconf" => :build
   depends_on "automake" => :build
@@ -31,12 +31,12 @@ class Ngdevkit < Formula
     venv.pip_install resource("ruamel-yaml")
 
     # We require gnu make > 4.0, so use the one from brew
-    gmake = "#{Formula["make"].opt_bin}/gmake"
+    gmake = "#{formula_opt_bin("make")}/gmake"
     ENV["MAKE"] = gmake
 
     # Homebrew picks the system's gnu M4, which is too old for autoreconf
     # (it doesn't have option --gnu). Pick homebrew's version instead
-    ENV["M4"] = "#{Formula["m4"].opt_bin}/m4"
+    ENV["M4"] = "#{formula_opt_bin("m4")}/m4"
 
     # For M1 macs, brew libraries are installed in a non-standard
     # location, so some env vars must be set for autotools

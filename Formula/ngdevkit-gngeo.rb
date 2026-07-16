@@ -22,7 +22,7 @@ class NgdevkitGngeo < Formula
 
   def install
     # We require gnu make > 4.0, so use the one from brew
-    gmake = "#{Formula["make"].opt_bin}/gmake"
+    gmake = "#{formula_opt_bin("make")}/gmake"
     ENV["MAKE"] = gmake
 
     # For M1 macs, brew libraries are installed in a non-standard
