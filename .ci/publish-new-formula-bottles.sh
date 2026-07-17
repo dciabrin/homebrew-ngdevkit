@@ -10,6 +10,9 @@ test -f Formula/$pkg.rb
 
 keepopt=$(if brew info --json dciabrin/ngdevkit/$pkg | jq '.[0].bottle | length' | grep -wq 1; then echo "--keep-old"; fi)
 
+echo "Trusting the ngdevkit tap for brew pr-upload"
+brew trust dciabrin/ngdevkit
+
 # upload bottles to github
 echo "Upload bottle with: brew pr-upload --no-commit $keepopt --debug"
 brew pr-upload --no-commit $keepopt --debug
