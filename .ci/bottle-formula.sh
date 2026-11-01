@@ -8,6 +8,9 @@ pkg=$(.ci/pkg-name-from-branch.sh $BRANCH)
 echo "Building bottle for $pkg on macOS $OS"
 test -f Formula/$pkg.rb
 
+echo "Trusting the ngdevkit tap to allow brew commands"
+brew trust dciabrin/ngdevkit
+
 # configure build-bot based on whether we already have bottles
 # for other OS versions
 keepopt=$(if brew info --json dciabrin/ngdevkit/$pkg | jq '.[0].bottle | length' | grep -wq 1; then echo "--keep-old"; fi)
@@ -29,7 +32,7 @@ keepopt=$(if brew info --json dciabrin/ngdevkit/$pkg | jq '.[0].bottle | length'
 # to workaround all that, we first trust the tap, then save the trust
 # file in a temporary git commit, and remove the trust file
 # prior to running test-bot. the git clean will restore it for us.
-echo "Trusting the ngdevkit tap for brew test-bot"
+echo "Enforcing trust on the ngdevkit tap to allow brew test-bot"
 brew trust dciabrin/ngdevkit
 mkdir -p $PWD/home/.homebrew
 cp $HOME/.homebrew/trust.json $PWD/home/.homebrew

@@ -6,9 +6,9 @@ on:
 jobs:
   current_os:
     name: "Current macOS"
-    runs-on: macos-15
+    runs-on: xcode-27
     env:
-      OS: '15'
+      OS: '27'
       BRANCH: ${{ github.ref }}
       HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.GH_TOKEN }}
     steps:
@@ -31,38 +31,37 @@ jobs:
             *.bottle.json
             *.bottle*.tar.gz
 
-  # previous_os:
-  #   name: "Previous macOS"
-  #   runs-on: macos-14
-  #   env:
-  #     OS: '14'
-  #     BRANCH: ${{ github.ref }}
-  #     HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.GH_TOKEN }}
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v6
+  previous_os:
+    name: "Previous macOS"
+    runs-on: macos-26
+    env:
+      OS: '26'
+      BRANCH: ${{ github.ref }}
+      HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.GH_TOKEN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
 
-  #     - name: Bottle formula
-  #       run: |
-  #         rm -rf .github
-  #         .ci/setup-brew-environment.sh --update
-  #         .ci/bottle-formula.sh
-  #         git diff Formula/* | tee bottle-previous.diff
+      - name: Bottle formula
+        run: |
+          rm -rf .github
+          .ci/setup-brew-environment.sh --update
+          .ci/bottle-formula.sh
+          git diff Formula/* | tee bottle-previous.diff
 
-  #     - name: Capture bottles and hashes for next job
-  #       uses: actions/upload-artifact@v7
-  #       with:
-  #         name: bottle_previous
-  #         path: |
-  #           bottle-previous.diff
-  #           *.bottle.json
-  #           *.bottle*.tar.gz
+      - name: Capture bottles and hashes for next job
+        uses: actions/upload-artifact@v7
+        with:
+          name: bottle_previous
+          path: |
+            bottle-previous.diff
+            *.bottle.json
+            *.bottle*.tar.gz
         
   publish:
     name: "Publish new version and bottles"
     runs-on: macos-latest
-    # needs: [current_os, previous_os]
-    needs: [current_os]
+    needs: [current_os, previous_os]
     env:
       BRANCH: ${{ github.ref }}
       HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.GH_TOKEN }}
@@ -77,10 +76,10 @@ jobs:
         with:
           name: bottle_current
 
-      # - name: Retrieve bottle data for previous macOS
-      #   uses: actions/download-artifact@v8
-      #   with:
-      #     name: bottle_previous
+      - name: Retrieve bottle data for previous macOS
+        uses: actions/download-artifact@v8
+        with:
+          name: bottle_previous
 
       # Publishing the new version prior to the bottles, because
       # the bottle are bundled in a github archive which comes
