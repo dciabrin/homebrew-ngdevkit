@@ -1,16 +1,12 @@
 class Ngdevkit < Formula
   include Language::Python::Virtualenv
+  include Language::Python::Shebang
 
   desc "Open source development for Neo-Geo"
   homepage "https://github.com/dciabrin/ngdevkit"
   url "https://github.com/dciabrin/ngdevkit/archive/refs/tags/nightly-202610171524.tar.gz"
-  version "0.5+202610171524-2"
+  version "0.5+202610171524-3"
   sha256 "28bff6a9342acb871cf59e65d0511ad2d781ddbc8e39f988952da5b5ef376975"
-
-  bottle do
-    root_url "https://github.com/dciabrin/homebrew-ngdevkit/releases/download/ngdevkit-0.5+202610171524-2"
-    sha256 cellar: :any_skip_relocation, arm64_sequoia: "27e6ee260e91b51210d6815b9ad4f0d4e22a109bdf510266203c77506d7a97e8"
-  end
 
   depends_on "autoconf" => :build
   depends_on "automake" => :build
@@ -60,10 +56,12 @@ class Ngdevkit < Formula
     system gmake
     system gmake, "install"
 
+    # Fix shebangs of python scripts, to point to the virtualenv
+    rewrite_shebang python_shebang_rewrite_info(venv.root/"bin/python"), *bin.children
+
     # Lastly, let brew generate stubs for all the python scripts in ngdevkit.
     # Those stubs set up PYTHONPATH and run the real scripts automatically.
     ENV.prepend_create_path "PYTHONPATH", libexec/"lib/python3.14/site-packages"
-    bin.install Dir[libexec/"bin/*.py"]
     bin.env_script_all_files(libexec/"bin", PYTHONPATH: ENV["PYTHONPATH"])
   end
 
