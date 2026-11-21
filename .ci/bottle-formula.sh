@@ -41,4 +41,4 @@ git commit -m 'Temporary tap trust (CI)' --author 'CI build bot <>'
 
 # build bottle
 echo "Build bottle with: brew test-bot $keepopt --skip-setup --tap=dciabrin/ngdevkit Formula/$pkg.rb --debug"
-brew test-bot $keepopt --skip-setup --tap=dciabrin/ngdevkit Formula/$pkg.rb --debug
+brew test-bot $keepopt --skip-setup --tap=dciabrin/ngdevkit $pkg --debug

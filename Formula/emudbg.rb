@@ -1,15 +1,9 @@
 class Emudbg < Formula
   desc "Emulator-agnostic source-level debugging API"
   homepage "https://github.com/dciabrin/emudbg"
-  url "https://github.com/dciabrin/emudbg/archive/refs/tags/nightly-202403192028.tar.gz"
-  version "0.2+202403192028-4"
-  sha256 "56306dd13bebcf001bcf340695b05d225bf077fc9ef99283db8f46eaf019e536"
-
-  bottle do
-    root_url "https://github.com/dciabrin/homebrew-ngdevkit/releases/download/emudbg-0.2+202403192028-4"
-    sha256 cellar: :any_skip_relocation, arm64_golden_gate: "0989742ec7d79b74dad6754f8ae01b7896108551456f93b86456aec3714a3d74"
-    sha256 cellar: :any_skip_relocation, arm64_tahoe:       "7587a79409087a129987d56c35960b9301d93831450dcd99ee35fee7aad4282c"
-  end
+  url "https://github.com/dciabrin/emudbg/archive/refs/tags/nightly-202611211244.tar.gz"
+  version "0.2+202611211244-1"
+  sha256 "d5da4edb714ae6959f50e63a5d3485c0c44ea6a6dcbc1881e964a741cd5bfcff"
 
   depends_on "autoconf" => :build
   depends_on "automake" => :build
